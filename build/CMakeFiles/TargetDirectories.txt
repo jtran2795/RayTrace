@@ -1,5 +1,5 @@
-/home/sonata/Downloads/ray/build/CMakeFiles/edit_cache.dir
-/home/sonata/Downloads/ray/build/CMakeFiles/rebuild_cache.dir
-/home/sonata/Downloads/ray/build/src/CMakeFiles/edit_cache.dir
-/home/sonata/Downloads/ray/build/src/CMakeFiles/rebuild_cache.dir
-/home/sonata/Downloads/ray/build/src/CMakeFiles/ray.dir
+/home/sonata/Downloads/RayTracer/build/CMakeFiles/edit_cache.dir
+/home/sonata/Downloads/RayTracer/build/CMakeFiles/rebuild_cache.dir
+/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/edit_cache.dir
+/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/rebuild_cache.dir
+/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/ray.dir

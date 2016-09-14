@@ -1,4 +1,4 @@
-# Install script for directory: /home/sonata/Downloads/ray/src
+# Install script for directory: /home/sonata/Downloads/RayTracer/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
