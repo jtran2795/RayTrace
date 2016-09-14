@@ -86,6 +86,9 @@ glm::dvec3 RayTracer::traceRay(ray& r, const glm::dvec3& thresh, int depth, doub
 		// rays.
 		if(depth < 0)
 		{
+			if (haveCubeMap()){
+				return cubemap -> getColor(r);
+			}
 			return glm::dvec3(0.0, 0.0, 0.0);
 		}
 		//Get t
@@ -134,7 +137,9 @@ glm::dvec3 RayTracer::traceRay(ray& r, const glm::dvec3& thresh, int depth, doub
 		// is just black.
 		// 
 		// FIXME: Add CubeMap support here.
-
+			if (haveCubeMap()){
+				return cubemap -> getColor(r);
+			}
 		colorC = glm::dvec3(0.0, 0.0, 0.0);
 	}
 	return colorC;
