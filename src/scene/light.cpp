@@ -66,9 +66,9 @@ double PointLight::distanceAttenuation(const glm::dvec3& P) const
 	// You'll need to modify this method to attenuate the intensity 
 	// of the light based on the distance between the source and the 
 	// point P.  For now, we assume no attenuation and just return 1.0
-	//glm::dvec3 ld = (position-P);
+	double ld = glm::distance(P,position);
 	//double result = ld[1]*ld[1]+ld[2]*ld[2]+ld[0]*ld[0];
-	return 1;//result;
+	return glm::min(1.0,1/(0.01*(ld)*(ld)));//;//result;
 }
 
 glm::dvec3 PointLight::getColor() const

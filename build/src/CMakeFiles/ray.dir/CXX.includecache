@@ -331,6 +331,8 @@ ray.h
 /home/sonata/Downloads/RayTracer/src/scene/ray.h
 ../ui/TraceUI.h
 /home/sonata/Downloads/RayTracer/src/ui/TraceUI.h
+iostream
+-
 
 /home/sonata/Downloads/RayTracer/src/scene/cubeMap.h
 ../scene/material.h

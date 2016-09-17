@@ -54,6 +54,8 @@ glm::dvec3 RayTracer::tracePixel(int i, int j, unsigned int ctr)
 	double x = double(i)/double(buffer_width);
 	double y = double(j)/double(buffer_height);
 
+	cout << j << " "  << i << "" << ctr << endl;
+
 	unsigned char *pixel = buffer + ( i + j * buffer_width ) * 3;
 	col = trace(x, y, pixel, ctr);
 
@@ -94,7 +96,7 @@ glm::dvec3 RayTracer::traceRay(ray& r, const glm::dvec3& thresh, int depth, doub
 		//Get t
 		double c_t = i.t;
 		//Get N
-		glm::dvec3 N2 = i.N; 
+		glm::dvec3 N2 = glm::normalize(i.N); 
 		//Get mtrl
 		const Material& m = i.getMaterial();
 
@@ -111,21 +113,42 @@ glm::dvec3 RayTracer::traceRay(ray& r, const glm::dvec3& thresh, int depth, doub
 		colorC = colorC + m.kr(i)*traceRay(r_2, thresh, depth-1, t);
 		//cout << "MATERIAL k_r: " << m.kr(i)[0] << " " << m.kr(i)[1] << " " << m.kr(i)[2] << endl;
 		//if entering
-		//if(entering)
+		double entering = glm::dot(glm::normalize(r.getDirection()),glm::normalize(N2));
+		if( entering < 0)
 		//-- set indexes air = n_i and mtrl = n_t
-		//{
-		//	n_i = 1.0;
-		//	n_t = m.index(i);
-		//}
-		//else
-		//{
-		//	n_i = m.index(i);
-		//	n_t = 1.0;
-		//}
+		{
 
+			cout << "REFRACTION ENTERING " << 1.0 << " " << m.index(i) << endl;
+			n_i = 1.0;
+			n_t = m.index(i);
+		}
+		else if (entering > 0)
+		{
+			N2 = -N2;
+			cout << "REFRACTION LEAVING "  << m.index(i) << " " << 1.0 << endl;
+			n_i = m.index(i);
+			n_t = 1.0;
+		}
+		else
+		{
+			cout << "PARALLEL" << endl;
+			return glm::dvec3(0.0, 0.0, 0.0);
+		}
+		cout << "---> Color " << colorC[0] << " " << colorC[1] << " " << colorC[2] << endl;
 		//-- set indexes mtrl = n_t and mtrl = n_i
 
-		//if(k_t > 0 and not TIR)n
+		//glm::dvec3 rf_angle = glm::normalize(glm::refract(r.getDirection(),N2,n_i/n_t));
+		
+		double tir = 1 - (glm::pow(n_i/n_t,2) * (1-glm::pow(glm::dot(-N2,r.getDirection()),2)));
+		cout <<  "TIR value " << tir << endl;
+		if((m.kt(i)[0] > 0 || m.kt(i)[1] > 0 || m.kt(i)[2] > 0) && !((tir < 0) && (n_t < n_i)))
+		{
+			
+			ray r_3 = ray (q, glm::normalize(glm::refract(r.getDirection(),N2,n_i/n_t)), 0, 0, glm::dvec3(0,0,0), ray::REFRACTION);
+			cout << "REFRACTION HAPPENING " << r_3.getDirection()[0] << " " << r_3.getDirection()[1] << " " << r_3.getDirection()[2] << endl;
+			colorC = colorC + m.kt(i)*traceRay(r_3, thresh, depth-1, t);
+			cout << "---> Color " << colorC[0] << " " << colorC[1] << " " << colorC[2] << endl;
+		}
 		//Color = Color + mtrl.k_t *traceray(Q,Translated)
 
 
@@ -228,19 +251,101 @@ void RayTracer::traceSetup(int w, int h)
 
 void RayTracer::traceImage(int w, int h, int bs, double thresh)
 {
+	//h = (w / aspectRatio() + 0.5);
+	traceSetup( w, h );
+
+	for( int j = 0; j < h; ++j )
+		for( int i = 0; i < w; ++i )
+			tracePixel(i,j,0);
+
+
 	// YOUR CODE HERE
 	// FIXME: Start one or more threads for ray tracing
 }
 
 int RayTracer::aaImage(int samples, double aaThresh)
 {
-	// YOUR CODE HERE
-	// FIXME: Implement Anti-aliasing here
+
+	int real_height = (buffer_width / aspectRatio() + 0.5);
+	for( int j = 0; j < buffer_height; ++j )
+		for( int i = 0; i < buffer_width; ++i )
+			{
+				double x = double(i)/double(buffer_width);
+				double y = double(j)/double(buffer_height);
+				bool aa_check = false;
+
+				//cout << j << " "  << i << "" << ctr << endl;
+
+				unsigned char *pixel = buffer + ( i + j * buffer_width ) * 3;
+				//col = trace(x, y, pixel, ctr);
+
+				if( i - 1 >= 0)
+				{
+					unsigned char *temp_pixel = buffer + ( i-1 + j * buffer_width ) * 3;
+					if(pixel[0] != temp_pixel[0] || pixel[1] != temp_pixel[1] || pixel[2] != temp_pixel[2])
+					{
+						aa_check = true;
+					}  
+				}
+				else if( i + 1 < buffer_width)
+				{
+					unsigned char *temp_pixel = buffer + ( i+1 + j * buffer_width ) * 3;
+					if(pixel[0] != temp_pixel[0] || pixel[1] != temp_pixel[1] || pixel[2] != temp_pixel[2])
+					{
+						aa_check = true;
+					}  
+				}
+				else if( j - 1 >= 0)
+				{
+					unsigned char *temp_pixel = buffer + ( i + (j-1) * buffer_width ) * 3;
+					if(pixel[0] != temp_pixel[0] || pixel[1] != temp_pixel[1] || pixel[2] != temp_pixel[2])
+					{
+						aa_check = true;
+					}  
+				}
+				else if( j + 1 < buffer_height)
+				{
+					unsigned char *temp_pixel = buffer + ( i + (j+1) * buffer_width ) * 3;
+					if(pixel[0] != temp_pixel[0] || pixel[1] != temp_pixel[1] || pixel[2] != temp_pixel[2])
+					{
+						aa_check = true;
+					}  
+				}
+
+				if(aa_check)
+				{
+					glm::dvec3 col = {0.0,0.0,0.0};
+					double x_length = double(i+1)/double(buffer_width) - x;
+					double y_length = double(j+1)/double(buffer_height) - y;
+					std::cout << y_length << endl;
+					double x_offset = x_length*(samples/2);
+					double y_offset = y_length*(samples/2);
+					for(int k = 0; k < samples; k++)
+					{
+						for(int l = 0; l < samples; l++)
+						{
+							col += (trace((x-x_offset)+(k*x_length/samples), (y-y_offset)+(l*y_length/samples), pixel, 0))/(double(samples*samples));
+
+							std::cout << "AA CALC = " << ((x-x_offset)+(k*x_length/samples)) << " " << ((y-y_offset)+(l*y_length/samples)) << endl;
+						}
+					}
+					//col /= samples*samples;
+
+					pixel[0] = (int)( 255.0 * col[0]);
+					pixel[1] = (int)( 255.0 * col[1]);
+					pixel[2] = (int)( 255.0 * col[2]);
+				}
+
+			}
+	//std::cout << "Finished anti aliasing " << buffer_height << " " << real << endl;
+
 }
 
 bool RayTracer::checkRender()
 {
 	// YOUR CODE HERE
+	std::cout << "DONE" << endl;
+
 	// FIXME: Return true if tracing is done.
 	return true;
 }
