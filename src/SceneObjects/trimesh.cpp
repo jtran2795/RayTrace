@@ -57,6 +57,7 @@ const char* Trimesh::doubleCheck()
 {
     if( !materials.empty() && materials.size() != vertices.size() )
         return "Bad Trimesh: Wrong number of materials.";
+    generateNormals();
     if( !normals.empty() && normals.size() != vertices.size() )
         return "Bad Trimesh: Wrong number of normals.";
 
@@ -179,13 +180,21 @@ bool TrimeshFace::intersectLocal(ray& r, isect& i) const
     double temp2 = temp1[0]*temp1[0]+temp1[1]*temp1[1]+temp1[2]*temp1[2];
    // N
 
-    cout << "HIT!\n";
-
+    //cout << "HIT!\n";
     i.obj = this;
     i.setMaterial(this->getMaterial());
     i.t = t;
-    i.N = normal;
+    double N_x = glm::normalize(parent -> normals[ids[0]])[0]*alpha + glm::normalize(parent -> normals[ids[1]])[0]*beta + glm::normalize(parent -> normals[ids[2]])[0] *gamma;
+    double N_y = glm::normalize(parent -> normals[ids[0]])[1]*alpha + glm::normalize(parent -> normals[ids[1]])[1]*beta + glm::normalize(parent -> normals[ids[2]])[1] *gamma;
+    double N_z = glm::normalize(parent -> normals[ids[0]])[2]*alpha + glm::normalize(parent -> normals[ids[1]])[2]*beta + glm::normalize(parent -> normals[ids[2]])[2] *gamma;
+    i.N = glm::normalize(glm::dvec3{N_x,N_y,N_z});//normal;
+    //i.N = normal;
+    //std::cout << "A B C" << alpha << " " << beta << " " << gamma << endl;
+    //std::cout << "TRIMESH NORMALS" << parent ->  normals[ids[0]][0] << " " << parent ->  normals[ids[1]][0] << " " << parent ->  normals[ids[2]][0] << endl;
+    //std::cout << "TRIMESH NORMALS" << N_x << " " << N_y << " " << N_z << endl;
+    //abort();
     i.uvCoordinates = {alpha,beta};
+    i.bary = {alpha,beta,gamma};
     return true;
 }
 

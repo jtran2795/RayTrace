@@ -16,7 +16,6 @@ glm::dvec3 CubeMap::getColor(ray r) const {
 	double length = half * 2; 
 
 	glm::dvec3 d = glm::normalize(r.getDirection());
-
     double max = 0;
     int maxindex = 0; //dimension to eliminate;
     for(int i = 0; i < 3; i++)
@@ -29,7 +28,7 @@ glm::dvec3 CubeMap::getColor(ray r) const {
         }
     }
 
-    d[maxindex] = 2;
+/*    d[maxindex] = 2;
     std::cout << "CUBEMAP d COORDS " << d[0] << " " << d[1] << " " << d[2] << std::endl;
     glm::dvec3 coordinates = {-1,-1,-1};
 	for(int i = 0; i < 3; i++)
@@ -46,67 +45,61 @@ glm::dvec3 CubeMap::getColor(ray r) const {
 			{
 				coordinates[i] = half + half*d[i];
 			}
-		}
+		}*/
+
+	double sc = 0;
+	double tc = 0;
+	double ma = 0;
 
 	if(max < 0 && maxindex == 0) //neg x axis
 	{
+		sc = d[2];
+		tc = -d[1];
+		ma = d[0];
 		currentmap = 1;
+
 	}
 	if(max > 0 && maxindex == 0) //pos x axis
 	{
+		sc = -d[2];
+		tc = -d[1];
+		ma = d[0];
 		currentmap = 0;
 	}
 	if(max < 0 && maxindex == 1) //neg y axis
 	{
+		sc = d[0];
+		tc = -d[2];
+		ma = d[1];
 		currentmap = 3;
 	}
 	if(max > 0 && maxindex == 1) //neg y axis
 	{
+		sc = d[0];
+		tc = d[2];
+		ma = d[1];
 		currentmap = 2;
 	}
 	if(max < 0 && maxindex == 2) //neg z axis
 	{
+		sc = -d[0];
+		tc = -d[1];
+		ma = d[2];
 		currentmap = 4;
 	}
 	if(max > 0 && maxindex == 2) //neg z axis
-	{
+	{	
+		sc = d[0];
+		tc = d[1];
+		ma = d[2];
 		currentmap = 5;
 	}
 
-	double x = 0;
-	double y = 0;
+	double x = (sc/glm::abs(ma) + 1) / 2;
 
-	int savedindex;
-	for(savedindex = 0; savedindex < 3; savedindex++)
-	{
-		if(coordinates[savedindex] == -1)
-		{
-			continue;
-		}
-		else
-		{
-			x = coordinates[savedindex];
-			break;
-		}
-	}
+	double y = (tc/glm::abs(ma) + 1) / 2;
 
-	for(; savedindex < 3; savedindex++)
-	{
-		if(coordinates[savedindex] == -1)
-		{
-			continue;
-		}
-		else
-		{
-			y = coordinates[savedindex];
-			break;
-		}
-	}
+	std::cout << " CUBEMAP X " << x << " CUBEMAP Y " << 1-y << std::endl;
 
-	double u = x/length;
-	double v = y/length;
-
-	std::cout << " CUBEMAP X " << x << " CUBEMAP Y " << y << std::endl;
-
-	return tMap[currentmap] -> getMappedValue(glm::dvec2{u,v});
+	return tMap[currentmap] -> getMappedValue(glm::dvec2{x,1-y});
 }

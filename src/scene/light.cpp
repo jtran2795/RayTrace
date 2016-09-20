@@ -18,9 +18,9 @@ glm::dvec3 DirectionalLight::shadowAttenuation(const ray& r, const glm::dvec3& p
 	// YOUR CODE HERE:
 	// You should implement shadow-handling code here.
 	glm::dvec3 d = getDirection(p);
-	std::cout << "DIRECTIONAL LIGHT" << endl;
-	std::cout << "Directional of p "<< d[0] << " " << d[1] << " " << d[2] << endl;
-	ray n_ray = ray(p,-d,0,0,glm::dvec3(1,1,1),ray::SHADOW);
+	//std::cout << "DIRECTIONAL LIGHT" << endl;
+	//std::cout << "Directional of p "<< d[0] << " " << d[1] << " " << d[2] << endl;
+	ray n_ray = ray(p,d,0,0,glm::dvec3(1,1,1),ray::SHADOW);
 	
     //from infinity to zero
 
@@ -36,16 +36,16 @@ glm::dvec3 DirectionalLight::shadowAttenuation(const ray& r, const glm::dvec3& p
 
 	if(!(scene -> intersect(n_ray,i)))//sqrt(q[1]*q[1]+q[2]*q[2]+q[0]*q[0]) < 900)
 	{
-		std::cout << "No light Directional" << endl;
-		return glm::dvec3(0,0,0);
+		//std::cout << "No light Directional" << endl;
+		return glm::dvec3(1,1,1);
 		
 	}
 	else
 	{
-		std::cout << "Some light" << endl;
-		return glm::dvec3(1,1,1);
+		//std::cout << "Some light" << endl;
+		return glm::dvec3(0,0,0);
 	}
-	return glm::dvec3(1.0, 1.0, 1.0);
+	//return glm::dvec3(1.0, 1.0, 1.0);
 }
 
 glm::dvec3 DirectionalLight::getColor() const
@@ -88,12 +88,12 @@ glm::dvec3 PointLight::shadowAttenuation(const ray& r, const glm::dvec3& p) cons
 	// You should implement shadow-handling code here.
 	
 	glm::dvec3 d = getDirection(p);
-	std::cout << p[0] << " " << p[1] << " " << p[2] << endl;
+	//std::cout << p[0] << " " << p[1] << " " << p[2] << endl;
 	ray n_ray = ray(p,d,0,0,glm::dvec3(1,1,1),ray::SHADOW);
 	isect i;
 	if(!(scene -> intersect(n_ray,i)))
 	{
-		std::cout << "DEAD";
+		//std::cout << "DEAD";
 		return glm::dvec3(1,1,1);
 	}
 	//double t = i.t;
@@ -101,18 +101,18 @@ glm::dvec3 PointLight::shadowAttenuation(const ray& r, const glm::dvec3& p) cons
 	double qlength = glm::distance(p,q);
 	double lightlength = glm::distance(p,position);
 
-	std::cout << "qlength = " << qlength << " lightlength " << lightlength << endl;
+	//std::cout << "qlength = " << qlength << " lightlength " << lightlength << endl;
 
 	//std::cout << "q length :"<< sqrt(q[1]*q[1]+q[2]*q[2]+q[0]*q[0]) << "other length " << sqrt(ld[1]*ld[1]+ld[2]*ld[2]+ld[0]*ld[0]) << endl;
 	if(qlength < lightlength)
 	{
-		std::cout << "No light" << endl;
+		//std::cout << "No light" << endl;
 		return glm::dvec3(0,0,0);
 		
 	}
 	else
 	{
-		std::cout << "Some light" << endl;
+		//std::cout << "Some light" << endl;
 		return glm::dvec3(1,1,1);
 	}
 }

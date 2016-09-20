@@ -29,11 +29,9 @@ glm::dvec3 Material::shade(Scene *scene, const ray& r, const isect& i) const
 	for (vector<Light*>::const_iterator litr = scene -> beginLights(); litr != scene -> endLights(); ++litr)
 	{
 		Light* pLight = *litr;
-		if (!isnan(glm::pow(glm::dot(glm::reflect(pLight -> getDirection(q),i.N),r.getDirection()),shininess(i))))
+		spec = glm::pow(glm::dot(glm::reflect(pLight -> getDirection(q),i.N),r.getDirection()),shininess(i));
+		if (isnan(spec))
 		{
-			spec = glm::pow(glm::dot(glm::reflect(pLight -> getDirection(q),i.N),r.getDirection()),shininess(i));
-		}
-		else{
 			spec = 0;
 		}
 		glm::dvec3 atten = pLight -> distanceAttenuation(q) * pLight -> shadowAttenuation(r,q);

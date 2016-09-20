@@ -109,45 +109,52 @@ glm::dvec3 RayTracer::traceRay(ray& r, const glm::dvec3& thresh, int depth, doub
 		glm::dvec3 c_R = glm::reflect(N2,r.getDirection());
 		//traceray color of the reflection vector, subtract depth
 		//;
-		ray r_2 = ray (q, glm::normalize(glm::reflect(r.getDirection(),N2)), 0, 0, glm::dvec3(1,1,1), ray::REFLECTION);
-		colorC = colorC + m.kr(i)*traceRay(r_2, thresh, depth-1, t);
+		if(m.kr(i)[0] > 0 || m.kr(i)[1] > 0 || m.kr(i)[2] > 0 )
+		{
+			ray r_2 = ray (q, glm::normalize(glm::reflect(r.getDirection(),N2)), 0, 0, glm::dvec3(1,1,1), ray::REFLECTION);
+			colorC = colorC + m.kr(i)*traceRay(r_2, thresh, depth-1, t);
+		}
 		//cout << "MATERIAL k_r: " << m.kr(i)[0] << " " << m.kr(i)[1] << " " << m.kr(i)[2] << endl;
 		//if entering
+		if(!(m.kt(i)[0] > 0 || m.kt(i)[1] > 0 || m.kt(i)[2] > 0))
+		{
+			return colorC;
+		}
 		double entering = glm::dot(glm::normalize(r.getDirection()),glm::normalize(N2));
 		if( entering < 0)
 		//-- set indexes air = n_i and mtrl = n_t
 		{
 
-			cout << "REFRACTION ENTERING " << 1.0 << " " << m.index(i) << endl;
+			//cout << "REFRACTION ENTERING " << 1.0 << " " << m.index(i) << endl;
 			n_i = 1.0;
 			n_t = m.index(i);
 		}
 		else if (entering > 0)
 		{
 			N2 = -N2;
-			cout << "REFRACTION LEAVING "  << m.index(i) << " " << 1.0 << endl;
+			//cout << "REFRACTION LEAVING "  << m.index(i) << " " << 1.0 << endl;
 			n_i = m.index(i);
 			n_t = 1.0;
 		}
 		else
 		{
-			cout << "PARALLEL" << endl;
+			//cout << "PARALLEL" << endl;
 			return glm::dvec3(0.0, 0.0, 0.0);
 		}
-		cout << "---> Color " << colorC[0] << " " << colorC[1] << " " << colorC[2] << endl;
+		//cout << "---> Color " << colorC[0] << " " << colorC[1] << " " << colorC[2] << endl;
 		//-- set indexes mtrl = n_t and mtrl = n_i
 
 		//glm::dvec3 rf_angle = glm::normalize(glm::refract(r.getDirection(),N2,n_i/n_t));
 		
 		double tir = 1 - (glm::pow(n_i/n_t,2) * (1-glm::pow(glm::dot(-N2,r.getDirection()),2)));
-		cout <<  "TIR value " << tir << endl;
+		//cout <<  "TIR value " << tir << endl;
 		if((m.kt(i)[0] > 0 || m.kt(i)[1] > 0 || m.kt(i)[2] > 0) && !((tir < 0) && (n_t < n_i)))
 		{
 			
 			ray r_3 = ray (q, glm::normalize(glm::refract(r.getDirection(),N2,n_i/n_t)), 0, 0, glm::dvec3(0,0,0), ray::REFRACTION);
-			cout << "REFRACTION HAPPENING " << r_3.getDirection()[0] << " " << r_3.getDirection()[1] << " " << r_3.getDirection()[2] << endl;
+			//cout << "REFRACTION HAPPENING " << r_3.getDirection()[0] << " " << r_3.getDirection()[1] << " " << r_3.getDirection()[2] << endl;
 			colorC = colorC + m.kt(i)*traceRay(r_3, thresh, depth-1, t);
-			cout << "---> Color " << colorC[0] << " " << colorC[1] << " " << colorC[2] << endl;
+			//cout << "---> Color " << colorC[0] << " " << colorC[1] << " " << colorC[2] << endl;
 		}
 		//Color = Color + mtrl.k_t *traceray(Q,Translated)
 
