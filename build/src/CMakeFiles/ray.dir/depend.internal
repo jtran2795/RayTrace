@@ -116,9 +116,13 @@ src/CMakeFiles/ray.dir/main.cpp.o
  /home/sonata/Downloads/RayTracer/src/RayTracer.h
  /home/sonata/Downloads/RayTracer/src/fileio/bitmap.h
  /home/sonata/Downloads/RayTracer/src/main.cpp
+ /home/sonata/Downloads/RayTracer/src/scene/bbox.h
+ /home/sonata/Downloads/RayTracer/src/scene/camera.h
  /home/sonata/Downloads/RayTracer/src/scene/cubeMap.h
+ /home/sonata/Downloads/RayTracer/src/scene/kdTree.h
  /home/sonata/Downloads/RayTracer/src/scene/material.h
  /home/sonata/Downloads/RayTracer/src/scene/ray.h
+ /home/sonata/Downloads/RayTracer/src/scene/scene.h
  /home/sonata/Downloads/RayTracer/src/ui/CommandLineUI.h
  /home/sonata/Downloads/RayTracer/src/ui/CubeMapChooser.h
  /home/sonata/Downloads/RayTracer/src/ui/GraphicalUI.h
@@ -218,6 +222,15 @@ src/CMakeFiles/ray.dir/scene/cubeMap.cpp.o
  /home/sonata/Downloads/RayTracer/src/scene/material.h
  /home/sonata/Downloads/RayTracer/src/scene/ray.h
  /home/sonata/Downloads/RayTracer/src/ui/TraceUI.h
+src/CMakeFiles/ray.dir/scene/kdTree.cpp.o
+ /home/sonata/Downloads/RayTracer/src/scene/bbox.h
+ /home/sonata/Downloads/RayTracer/src/scene/camera.h
+ /home/sonata/Downloads/RayTracer/src/scene/kdTree.cpp
+ /home/sonata/Downloads/RayTracer/src/scene/kdTree.h
+ /home/sonata/Downloads/RayTracer/src/scene/material.h
+ /home/sonata/Downloads/RayTracer/src/scene/ray.h
+ /home/sonata/Downloads/RayTracer/src/scene/scene.h
+ /home/sonata/Downloads/RayTracer/src/ui/TraceUI.h
 src/CMakeFiles/ray.dir/scene/light.cpp.o
  /home/sonata/Downloads/RayTracer/src/scene/bbox.h
  /home/sonata/Downloads/RayTracer/src/scene/camera.h
@@ -268,17 +281,25 @@ src/CMakeFiles/ray.dir/scene/scene.cpp.o
 src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o
  /home/sonata/Downloads/RayTracer/src/RayTracer.h
  /home/sonata/Downloads/RayTracer/src/fileio/bitmap.h
+ /home/sonata/Downloads/RayTracer/src/scene/bbox.h
+ /home/sonata/Downloads/RayTracer/src/scene/camera.h
  /home/sonata/Downloads/RayTracer/src/scene/cubeMap.h
+ /home/sonata/Downloads/RayTracer/src/scene/kdTree.h
  /home/sonata/Downloads/RayTracer/src/scene/material.h
  /home/sonata/Downloads/RayTracer/src/scene/ray.h
+ /home/sonata/Downloads/RayTracer/src/scene/scene.h
  /home/sonata/Downloads/RayTracer/src/ui/CommandLineUI.cpp
  /home/sonata/Downloads/RayTracer/src/ui/CommandLineUI.h
  /home/sonata/Downloads/RayTracer/src/ui/TraceUI.h
 src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o
  /home/sonata/Downloads/RayTracer/src/RayTracer.h
+ /home/sonata/Downloads/RayTracer/src/scene/bbox.h
+ /home/sonata/Downloads/RayTracer/src/scene/camera.h
  /home/sonata/Downloads/RayTracer/src/scene/cubeMap.h
+ /home/sonata/Downloads/RayTracer/src/scene/kdTree.h
  /home/sonata/Downloads/RayTracer/src/scene/material.h
  /home/sonata/Downloads/RayTracer/src/scene/ray.h
+ /home/sonata/Downloads/RayTracer/src/scene/scene.h
  /home/sonata/Downloads/RayTracer/src/ui/CubeMapChooser.cxx
  /home/sonata/Downloads/RayTracer/src/ui/CubeMapChooser.h
  /home/sonata/Downloads/RayTracer/src/ui/GraphicalUI.h
@@ -328,9 +349,13 @@ src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o
  /usr/local/include/FL/glu.h
 src/CMakeFiles/ray.dir/ui/GraphicalUI.cpp.o
  /home/sonata/Downloads/RayTracer/src/RayTracer.h
+ /home/sonata/Downloads/RayTracer/src/scene/bbox.h
+ /home/sonata/Downloads/RayTracer/src/scene/camera.h
  /home/sonata/Downloads/RayTracer/src/scene/cubeMap.h
+ /home/sonata/Downloads/RayTracer/src/scene/kdTree.h
  /home/sonata/Downloads/RayTracer/src/scene/material.h
  /home/sonata/Downloads/RayTracer/src/scene/ray.h
+ /home/sonata/Downloads/RayTracer/src/scene/scene.h
  /home/sonata/Downloads/RayTracer/src/ui/CubeMapChooser.h
  /home/sonata/Downloads/RayTracer/src/ui/GraphicalUI.cpp
  /home/sonata/Downloads/RayTracer/src/ui/GraphicalUI.h
@@ -388,9 +413,13 @@ src/CMakeFiles/ray.dir/ui/ModelerCamera.cpp.o
 src/CMakeFiles/ray.dir/ui/TraceGLWindow.cpp.o
  /home/sonata/Downloads/RayTracer/src/RayTracer.h
  /home/sonata/Downloads/RayTracer/src/fileio/bitmap.h
+ /home/sonata/Downloads/RayTracer/src/scene/bbox.h
+ /home/sonata/Downloads/RayTracer/src/scene/camera.h
  /home/sonata/Downloads/RayTracer/src/scene/cubeMap.h
+ /home/sonata/Downloads/RayTracer/src/scene/kdTree.h
  /home/sonata/Downloads/RayTracer/src/scene/material.h
  /home/sonata/Downloads/RayTracer/src/scene/ray.h
+ /home/sonata/Downloads/RayTracer/src/scene/scene.h
  /home/sonata/Downloads/RayTracer/src/ui/CubeMapChooser.h
  /home/sonata/Downloads/RayTracer/src/ui/GraphicalUI.h
  /home/sonata/Downloads/RayTracer/src/ui/TraceGLWindow.cpp
@@ -443,6 +472,7 @@ src/CMakeFiles/ray.dir/ui/debuggingView.cpp.o
  /home/sonata/Downloads/RayTracer/src/scene/bbox.h
  /home/sonata/Downloads/RayTracer/src/scene/camera.h
  /home/sonata/Downloads/RayTracer/src/scene/cubeMap.h
+ /home/sonata/Downloads/RayTracer/src/scene/kdTree.h
  /home/sonata/Downloads/RayTracer/src/scene/light.h
  /home/sonata/Downloads/RayTracer/src/scene/material.h
  /home/sonata/Downloads/RayTracer/src/scene/ray.h

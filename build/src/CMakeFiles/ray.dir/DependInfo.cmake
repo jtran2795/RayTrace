@@ -21,6 +21,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/sonata/Downloads/RayTracer/src/parser/Tokenizer.cpp" "/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/ray.dir/parser/Tokenizer.cpp.o"
   "/home/sonata/Downloads/RayTracer/src/scene/camera.cpp" "/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/ray.dir/scene/camera.cpp.o"
   "/home/sonata/Downloads/RayTracer/src/scene/cubeMap.cpp" "/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/ray.dir/scene/cubeMap.cpp.o"
+  "/home/sonata/Downloads/RayTracer/src/scene/kdTree.cpp" "/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/ray.dir/scene/kdTree.cpp.o"
   "/home/sonata/Downloads/RayTracer/src/scene/light.cpp" "/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/ray.dir/scene/light.cpp.o"
   "/home/sonata/Downloads/RayTracer/src/scene/material.cpp" "/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/ray.dir/scene/material.cpp.o"
   "/home/sonata/Downloads/RayTracer/src/scene/ray.cpp" "/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/ray.dir/scene/ray.cpp.o"

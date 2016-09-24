@@ -584,6 +584,33 @@ scene/cubeMap.cpp.s:
 	cd /home/sonata/Downloads/RayTracer/build && $(MAKE) -f src/CMakeFiles/ray.dir/build.make src/CMakeFiles/ray.dir/scene/cubeMap.cpp.s
 .PHONY : scene/cubeMap.cpp.s
 
+scene/kdTree.o: scene/kdTree.cpp.o
+
+.PHONY : scene/kdTree.o
+
+# target to build an object file
+scene/kdTree.cpp.o:
+	cd /home/sonata/Downloads/RayTracer/build && $(MAKE) -f src/CMakeFiles/ray.dir/build.make src/CMakeFiles/ray.dir/scene/kdTree.cpp.o
+.PHONY : scene/kdTree.cpp.o
+
+scene/kdTree.i: scene/kdTree.cpp.i
+
+.PHONY : scene/kdTree.i
+
+# target to preprocess a source file
+scene/kdTree.cpp.i:
+	cd /home/sonata/Downloads/RayTracer/build && $(MAKE) -f src/CMakeFiles/ray.dir/build.make src/CMakeFiles/ray.dir/scene/kdTree.cpp.i
+.PHONY : scene/kdTree.cpp.i
+
+scene/kdTree.s: scene/kdTree.cpp.s
+
+.PHONY : scene/kdTree.s
+
+# target to generate assembly for a file
+scene/kdTree.cpp.s:
+	cd /home/sonata/Downloads/RayTracer/build && $(MAKE) -f src/CMakeFiles/ray.dir/build.make src/CMakeFiles/ray.dir/scene/kdTree.cpp.s
+.PHONY : scene/kdTree.cpp.s
+
 scene/light.o: scene/light.cpp.o
 
 .PHONY : scene/light.o
@@ -968,6 +995,9 @@ help:
 	@echo "... scene/cubeMap.o"
 	@echo "... scene/cubeMap.i"
 	@echo "... scene/cubeMap.s"
+	@echo "... scene/kdTree.o"
+	@echo "... scene/kdTree.i"
+	@echo "... scene/kdTree.s"
 	@echo "... scene/light.o"
 	@echo "... scene/light.i"
 	@echo "... scene/light.s"

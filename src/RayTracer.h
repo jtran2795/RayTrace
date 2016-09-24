@@ -6,13 +6,15 @@
 // The main ray tracer.
 
 #include "scene/ray.h"
-#include "scene/cubeMap.h"
+#include "scene/cubeMap.h" 
 #include <time.h>
 #include <thread>
 #include <queue>
 #include <glm/vec3.hpp>
+#include "scene/kdTree.h"
 
 class Scene;
+//class kdTree;
 class Pixel
 {
 public:
@@ -63,6 +65,7 @@ public:
 	CubeMap* getCubeMap() { return cubemap; }
 
 public:
+	kdTree yggdrasil;
 	unsigned char *buffer;
 	int buffer_width, buffer_height;
 	int bufferSize;

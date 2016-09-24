@@ -6,6 +6,7 @@
 #include "scene/light.h"
 #include "scene/material.h"
 #include "scene/ray.h"
+//#include "scene/kdTree.h"
 
 #include "parser/Tokenizer.h"
 #include "parser/Parser.h"
@@ -238,6 +239,12 @@ bool RayTracer::loadScene( char* fn ) {
 	}
 
 	if( !sceneLoaded() ) return false;
+	std::vector<Geometry*> obj_list;
+	for(std::vector<Geometry*>::const_iterator begin = scene -> beginObjects(); begin !=  scene -> endObjects(); begin++){
+			obj_list.push_back((*begin));
+	}
+	std::cout << "Total objects in the entire scene " <<  obj_list.size() << std::endl;
+	yggdrasil = kdTree(scene, obj_list, scene -> bounds(),3);
 
 	return true;
 }
