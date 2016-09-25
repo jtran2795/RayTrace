@@ -11,7 +11,7 @@
 #include <thread>
 #include <queue>
 #include <glm/vec3.hpp>
-#include "scene/kdTree.h"
+//#include "scene/kdTree.h"
 
 class Scene;
 //class kdTree;
@@ -66,7 +66,7 @@ public:
 	CubeMap* getCubeMap() { return cubemap; }
 
 public:
-	kdTree yggdrasil;
+	//kdTree yggdrasil;
 	unsigned char *buffer;
 	int buffer_width, buffer_height;
 	int bufferSize;

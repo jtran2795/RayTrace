@@ -115,13 +115,9 @@ src/CMakeFiles/ray.dir/fileio/pngimage.cpp.o: ../src/fileio/pngimage.h
 src/CMakeFiles/ray.dir/main.cpp.o: ../src/RayTracer.h
 src/CMakeFiles/ray.dir/main.cpp.o: ../src/fileio/bitmap.h
 src/CMakeFiles/ray.dir/main.cpp.o: ../src/main.cpp
-src/CMakeFiles/ray.dir/main.cpp.o: ../src/scene/bbox.h
-src/CMakeFiles/ray.dir/main.cpp.o: ../src/scene/camera.h
 src/CMakeFiles/ray.dir/main.cpp.o: ../src/scene/cubeMap.h
-src/CMakeFiles/ray.dir/main.cpp.o: ../src/scene/kdTree.h
 src/CMakeFiles/ray.dir/main.cpp.o: ../src/scene/material.h
 src/CMakeFiles/ray.dir/main.cpp.o: ../src/scene/ray.h
-src/CMakeFiles/ray.dir/main.cpp.o: ../src/scene/scene.h
 src/CMakeFiles/ray.dir/main.cpp.o: ../src/ui/CommandLineUI.h
 src/CMakeFiles/ray.dir/main.cpp.o: ../src/ui/CubeMapChooser.h
 src/CMakeFiles/ray.dir/main.cpp.o: ../src/ui/GraphicalUI.h
@@ -280,25 +276,17 @@ src/CMakeFiles/ray.dir/scene/scene.cpp.o: /usr/local/include/FL/gl.h
 
 src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o: ../src/RayTracer.h
 src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o: ../src/fileio/bitmap.h
-src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o: ../src/scene/bbox.h
-src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o: ../src/scene/camera.h
 src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o: ../src/scene/cubeMap.h
-src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o: ../src/scene/kdTree.h
 src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o: ../src/scene/material.h
 src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o: ../src/scene/ray.h
-src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o: ../src/scene/scene.h
 src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o: ../src/ui/CommandLineUI.cpp
 src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o: ../src/ui/CommandLineUI.h
 src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o: ../src/ui/TraceUI.h
 
 src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o: ../src/RayTracer.h
-src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o: ../src/scene/bbox.h
-src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o: ../src/scene/camera.h
 src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o: ../src/scene/cubeMap.h
-src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o: ../src/scene/kdTree.h
 src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o: ../src/scene/material.h
 src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o: ../src/scene/ray.h
-src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o: ../src/scene/scene.h
 src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o: ../src/ui/CubeMapChooser.cxx
 src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o: ../src/ui/CubeMapChooser.h
 src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o: ../src/ui/GraphicalUI.h
@@ -348,13 +336,9 @@ src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o: /usr/local/include/FL/gl.h
 src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o: /usr/local/include/FL/glu.h
 
 src/CMakeFiles/ray.dir/ui/GraphicalUI.cpp.o: ../src/RayTracer.h
-src/CMakeFiles/ray.dir/ui/GraphicalUI.cpp.o: ../src/scene/bbox.h
-src/CMakeFiles/ray.dir/ui/GraphicalUI.cpp.o: ../src/scene/camera.h
 src/CMakeFiles/ray.dir/ui/GraphicalUI.cpp.o: ../src/scene/cubeMap.h
-src/CMakeFiles/ray.dir/ui/GraphicalUI.cpp.o: ../src/scene/kdTree.h
 src/CMakeFiles/ray.dir/ui/GraphicalUI.cpp.o: ../src/scene/material.h
 src/CMakeFiles/ray.dir/ui/GraphicalUI.cpp.o: ../src/scene/ray.h
-src/CMakeFiles/ray.dir/ui/GraphicalUI.cpp.o: ../src/scene/scene.h
 src/CMakeFiles/ray.dir/ui/GraphicalUI.cpp.o: ../src/ui/CubeMapChooser.h
 src/CMakeFiles/ray.dir/ui/GraphicalUI.cpp.o: ../src/ui/GraphicalUI.cpp
 src/CMakeFiles/ray.dir/ui/GraphicalUI.cpp.o: ../src/ui/GraphicalUI.h
@@ -412,13 +396,9 @@ src/CMakeFiles/ray.dir/ui/ModelerCamera.cpp.o: /usr/local/include/FL/glu.h
 
 src/CMakeFiles/ray.dir/ui/TraceGLWindow.cpp.o: ../src/RayTracer.h
 src/CMakeFiles/ray.dir/ui/TraceGLWindow.cpp.o: ../src/fileio/bitmap.h
-src/CMakeFiles/ray.dir/ui/TraceGLWindow.cpp.o: ../src/scene/bbox.h
-src/CMakeFiles/ray.dir/ui/TraceGLWindow.cpp.o: ../src/scene/camera.h
 src/CMakeFiles/ray.dir/ui/TraceGLWindow.cpp.o: ../src/scene/cubeMap.h
-src/CMakeFiles/ray.dir/ui/TraceGLWindow.cpp.o: ../src/scene/kdTree.h
 src/CMakeFiles/ray.dir/ui/TraceGLWindow.cpp.o: ../src/scene/material.h
 src/CMakeFiles/ray.dir/ui/TraceGLWindow.cpp.o: ../src/scene/ray.h
-src/CMakeFiles/ray.dir/ui/TraceGLWindow.cpp.o: ../src/scene/scene.h
 src/CMakeFiles/ray.dir/ui/TraceGLWindow.cpp.o: ../src/ui/CubeMapChooser.h
 src/CMakeFiles/ray.dir/ui/TraceGLWindow.cpp.o: ../src/ui/GraphicalUI.h
 src/CMakeFiles/ray.dir/ui/TraceGLWindow.cpp.o: ../src/ui/TraceGLWindow.cpp
@@ -471,7 +451,6 @@ src/CMakeFiles/ray.dir/ui/debuggingView.cpp.o: ../src/RayTracer.h
 src/CMakeFiles/ray.dir/ui/debuggingView.cpp.o: ../src/scene/bbox.h
 src/CMakeFiles/ray.dir/ui/debuggingView.cpp.o: ../src/scene/camera.h
 src/CMakeFiles/ray.dir/ui/debuggingView.cpp.o: ../src/scene/cubeMap.h
-src/CMakeFiles/ray.dir/ui/debuggingView.cpp.o: ../src/scene/kdTree.h
 src/CMakeFiles/ray.dir/ui/debuggingView.cpp.o: ../src/scene/light.h
 src/CMakeFiles/ray.dir/ui/debuggingView.cpp.o: ../src/scene/material.h
 src/CMakeFiles/ray.dir/ui/debuggingView.cpp.o: ../src/scene/ray.h

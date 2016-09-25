@@ -47,8 +47,6 @@ queue
 -
 glm/vec3.hpp
 -
-scene/kdTree.h
-/home/sonata/Downloads/RayTracer/src/scene/kdTree.h
 
 /home/sonata/Downloads/RayTracer/src/SceneObjects/Box.cpp
 cmath

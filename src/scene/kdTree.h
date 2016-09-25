@@ -1,6 +1,7 @@
 #pragma once
 // Note: you can put kd-tree heree
 #include "scene.h"
+class Geometry;
 class kdTree {
 //Geometry* se;
 private:
@@ -13,8 +14,8 @@ public:
 	std::vector<glm::dvec3> coordinates;
 	double dividing_plane;
 	int dividing_dim;
-
-	kdTree();
+	int dead;
+	kdTree(){dead = -1;};
 	kdTree(std::vector<Geometry*> objects, BoundingBox bb, int depth);
 	bool intersect(const ray& r, isect& i, std::vector<Geometry*>& rlist);
 	//kdTree() {scene = s;}

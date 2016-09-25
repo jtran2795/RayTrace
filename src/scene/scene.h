@@ -32,8 +32,8 @@
 class Light;
 class Scene;
 
-template <typename Obj>
-class KdTree;
+//template <typename Obj>
+class kdTree;
 
 class SceneElement {
 
@@ -245,6 +245,7 @@ public:
   std::vector<Geometry*> boundedobjects;
   std::vector<Light*> lights;
   Camera camera;
+  kdTree* kdtree;
 
   // This is the total amount of ambient light in the scene
   // (used as the I_a in the Phong shading model)
@@ -258,7 +259,6 @@ public:
   // are exempt from this requirement.
   BoundingBox sceneBounds;
   
-  KdTree kdtree;
 
  public:
   // This is used for debugging purposes only.

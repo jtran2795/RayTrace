@@ -1,14 +1,19 @@
 // Note: you can put kd-tree heree
 #include "kdTree.h"
 #include <iostream>
-kdTree::kdTree(){}
+
 kdTree::kdTree(std::vector<Geometry*> objects, BoundingBox bb, int depth) {
 	Boundary = bb;
-	scene = s;
+	//scene = s;
+	if(objects.size() == 0)
+	{
+		return;
+	}
 	if (depth == 0)
 	{
 		std::cout << "BoundingBox Shape " << bb.getMin()[0] << " " << bb.getMin()[1] << " " << bb.getMin()[2] << " x "  << bb.getMax()[0] << " " << bb.getMax()[1] << " " << bb.getMax()[2] << std::endl;
 		std::cout << "Amount of objects in it. " << objects.size() << std::endl;
+		obj_list = objects;
 		return;
 	}
 	for(std::vector<Geometry*>::const_iterator begin = objects.begin(); begin !=  objects.end(); begin++)
@@ -72,7 +77,7 @@ kdTree::kdTree(std::vector<Geometry*> objects, BoundingBox bb, int depth) {
 				maxplane = plane;
 			}
 		}
-		std::cout << dimension << std::endl;
+		//std::cout << dimension << std::endl;
 	}
 	//std::cout << "*** DECISION *** >> " << maxcost << " at " << maxplane << " " << maxcost_index <<  std::endl;
 	for(std::vector<Geometry*>::const_iterator begin2 = objects.begin(); begin2 !=  objects.end(); begin2++)
@@ -100,11 +105,13 @@ kdTree::kdTree(std::vector<Geometry*> objects, BoundingBox bb, int depth) {
 	BoundingBox leftBound = BoundingBox(leftbound_min,leftbound_max);
 	BoundingBox rightBound = BoundingBox(rightbound_min,rightbound_max);
 
-	left = new kdTree{s, left_list, leftBound, depth - 1};
-	right = new kdTree{s, right_list, rightBound, depth - 1};
+	left = new kdTree{left_list, leftBound, depth - 1};
+	std::cout << " Left completed " << depth << std::endl;
+	right = new kdTree{right_list, rightBound, depth - 1};
+	std::cout << " Right completed " << depth << std::endl;
 }
 
-bool kdTree::intersect(const ray& r, isect& i, std::vector<Geometry*>& rlist;)
+bool kdTree::intersect(const ray& r, isect& i, std::vector<Geometry*>& rlist)
 	{
 		double t_min;
 		double t_max;
@@ -114,10 +121,12 @@ bool kdTree::intersect(const ray& r, isect& i, std::vector<Geometry*>& rlist;)
 		glm::dvec3 d = r.getDirection();
 		double t_star = -p[dividing_dim]/d[dividing_dim];
 
-		if(left == NULL && right == NULL)
+
+
+		if(dead == -1)
 		{
 			bool intersection;
-			
+			std::cout << "IN THE ZONE obj_list size " << obj_list.size() << "\n";
 			for(std::vector<Geometry*>::const_iterator begin = obj_list.begin(); begin != obj_list.end(); begin++)
 			{
 				rlist.push_back((*begin));
@@ -131,20 +140,30 @@ bool kdTree::intersect(const ray& r, isect& i, std::vector<Geometry*>& rlist;)
 
 		if(t_max < t_star)
 		{
-			left -> intersect(ray(r.at(t_min),r.getDirection(),0,0,glm::dvec3{0,0,0},ray::VISIBILITY),i);
+			std::cout << "HIDARI \n";
+
+			left -> intersect(ray(r.at(t_min),r.getDirection(),0,0,glm::dvec3{0,0,0},ray::VISIBILITY),i, rlist);
+			return true;
 		}
 
 		if(t_min < t_star < t_max)
 		{
-			left -> intersect(ray(r.at(t_min),r.getDirection(),0,0,glm::dvec3{0,0,0},ray::VISIBILITY),i);
-			right -> intersect(ray(r.at(t_star),r.getDirection(),0,0,glm::dvec3{0,0,0},ray::VISIBILITY),i);
+			std::cout << "L & R \n";
+
+			left -> intersect(ray(r.at(t_min),r.getDirection(),0,0,glm::dvec3{0,0,0},ray::VISIBILITY),i, rlist);
+			right -> intersect(ray(r.at(t_star),r.getDirection(),0,0,glm::dvec3{0,0,0},ray::VISIBILITY),i, rlist);
+			return true;
 		}
 		if(t_star < t_min)
 		{
-			right -> intersect(ray(r.at(t_min),r.getDirection(),0,0,glm::dvec3{0,0,0},ray::VISIBILITY),i);
+			std::cout << "MIGI \n";
+
+
+			right -> intersect(ray(r.at(t_min),r.getDirection(),0,0,glm::dvec3{0,0,0},ray::VISIBILITY),i, rlist);
+			return true;
 		}
 
-		std::cout << "NOT EVEN." << std::endl;
+		std::cout << "NOT EVEN. tmin = " << t_min <<  "  tmax = " << t_max << " t_star " << t_star << std::endl;
 
 		return false;
 	}
