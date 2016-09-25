@@ -60,6 +60,7 @@ public:
 
 	void setReady( bool ready ) { m_bBufferReady = ready; }
 	bool isReady() const { return m_bBufferReady; }
+	bool checkNeighbors(unsigned char* pixel, unsigned char* neighbor, double aaThresh);
 
 	const Scene& getScene() { return *scene; }
 	CubeMap* getCubeMap() { return cubemap; }

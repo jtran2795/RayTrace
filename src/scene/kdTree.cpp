@@ -2,7 +2,7 @@
 #include "kdTree.h"
 #include <iostream>
 kdTree::kdTree(){}
-kdTree::kdTree(Scene* s, std::vector<Geometry*> objects, BoundingBox bb, int depth) {
+kdTree::kdTree(std::vector<Geometry*> objects, BoundingBox bb, int depth) {
 	Boundary = bb;
 	scene = s;
 	if (depth == 0)
@@ -88,7 +88,7 @@ kdTree::kdTree(Scene* s, std::vector<Geometry*> objects, BoundingBox bb, int dep
 		}
 	}
 	dividing_plane = maxplane;
-	dividing_index = maxcost_index;
+	dividing_dim   = maxcost_index;
 	glm::dvec3 leftbound_min = bb.getMin();
 	glm::dvec3 leftbound_max = bb.getMax();
 	leftbound_max[maxcost_index] = maxplane;
@@ -104,15 +104,49 @@ kdTree::kdTree(Scene* s, std::vector<Geometry*> objects, BoundingBox bb, int dep
 	right = new kdTree{s, right_list, rightBound, depth - 1};
 }
 
-kdTree::intersect(const ray &r)
+bool kdTree::intersect(const ray& r, isect& i, std::vector<Geometry*>& rlist;)
 	{
 		double t_min;
 		double t_max;
-		bool intersected = Bounds.intersect(r,t_min,t_max);
-		if(!intersected)
+		bool intersected = Boundary.intersect(r,t_min,t_max);
+		
+		glm::dvec3 p = r.getPosition();
+		glm::dvec3 d = r.getDirection();
+		double t_star = -p[dividing_dim]/d[dividing_dim];
+
+		if(left == NULL && right == NULL)
 		{
+			bool intersection;
 			
+			for(std::vector<Geometry*>::const_iterator begin = obj_list.begin(); begin != obj_list.end(); begin++)
+			{
+				rlist.push_back((*begin));
+			}
+			return true;
+
 		}
+		if( t_star <= RAY_EPSILON ) {
+			return false;
+		}
+
+		if(t_max < t_star)
+		{
+			left -> intersect(ray(r.at(t_min),r.getDirection(),0,0,glm::dvec3{0,0,0},ray::VISIBILITY),i);
+		}
+
+		if(t_min < t_star < t_max)
+		{
+			left -> intersect(ray(r.at(t_min),r.getDirection(),0,0,glm::dvec3{0,0,0},ray::VISIBILITY),i);
+			right -> intersect(ray(r.at(t_star),r.getDirection(),0,0,glm::dvec3{0,0,0},ray::VISIBILITY),i);
+		}
+		if(t_star < t_min)
+		{
+			right -> intersect(ray(r.at(t_min),r.getDirection(),0,0,glm::dvec3{0,0,0},ray::VISIBILITY),i);
+		}
+
+		std::cout << "NOT EVEN." << std::endl;
+
+		return false;
 	}
 
 /*build tree

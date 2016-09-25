@@ -55,7 +55,8 @@ glm::dvec3 RayTracer::tracePixel(int i, int j, unsigned int ctr)
 	double x = double(i)/double(buffer_width);
 	double y = double(j)/double(buffer_height);
 
-	cout << j << " "  << i << "" << ctr << endl;
+	//std::cout<< "-=-=-=" << ( i + (j) * buffer_width ) * 3 << std::endl;
+	//std::cout << "-=0=0=" << ( i + (j) * buffer_width ) * 3 << std::endl;
 
 	unsigned char *pixel = buffer + ( i + j * buffer_width ) * 3;
 	col = trace(x, y, pixel, ctr);
@@ -239,12 +240,7 @@ bool RayTracer::loadScene( char* fn ) {
 	}
 
 	if( !sceneLoaded() ) return false;
-	std::vector<Geometry*> obj_list;
-	for(std::vector<Geometry*>::const_iterator begin = scene -> beginObjects(); begin !=  scene -> endObjects(); begin++){
-			obj_list.push_back((*begin));
-	}
-	std::cout << "Total objects in the entire scene " <<  obj_list.size() << std::endl;
-	yggdrasil = kdTree(scene, obj_list, scene -> bounds(),3);
+	scene -> setupKD();
 
 	return true;
 }
@@ -282,6 +278,7 @@ int RayTracer::aaImage(int samples, double aaThresh)
 
 	int real_height = (buffer_width / aspectRatio() + 0.5);
 	for( int j = 0; j < buffer_height; ++j )
+	{
 		for( int i = 0; i < buffer_width; ++i )
 			{
 				double x = double(i)/double(buffer_width);
@@ -296,63 +293,125 @@ int RayTracer::aaImage(int samples, double aaThresh)
 				if( i - 1 >= 0)
 				{
 					unsigned char *temp_pixel = buffer + ( i-1 + j * buffer_width ) * 3;
-					if(pixel[0] != temp_pixel[0] || pixel[1] != temp_pixel[1] || pixel[2] != temp_pixel[2])
+					if(checkNeighbors(pixel,temp_pixel, aaThresh))
 					{
 						aa_check = true;
+						goto aa;
 					}  
 				}
-				else if( i + 1 < buffer_width)
+				if( i + 1 < buffer_width)
 				{
 					unsigned char *temp_pixel = buffer + ( i+1 + j * buffer_width ) * 3;
-					if(pixel[0] != temp_pixel[0] || pixel[1] != temp_pixel[1] || pixel[2] != temp_pixel[2])
+					if(checkNeighbors(pixel,temp_pixel, aaThresh))
 					{
 						aa_check = true;
+						goto aa;
 					}  
 				}
-				else if( j - 1 >= 0)
+				if( j - 1 >= 0)
 				{
 					unsigned char *temp_pixel = buffer + ( i + (j-1) * buffer_width ) * 3;
-					if(pixel[0] != temp_pixel[0] || pixel[1] != temp_pixel[1] || pixel[2] != temp_pixel[2])
+					//std::cout<< "-=-=-=" << ( i + (j-1) * buffer_width ) * 3 << std::endl;
+					//std::cout << "-=-=-=" << ( i + (j) * buffer_width ) * 3 << std::endl;
+					//abort();
+					if(checkNeighbors(pixel,temp_pixel, aaThresh))
 					{
 						aa_check = true;
+						goto aa;
+						
 					}  
 				}
-				else if( j + 1 < buffer_height)
+				if( j + 1 < buffer_height)
 				{
 					unsigned char *temp_pixel = buffer + ( i + (j+1) * buffer_width ) * 3;
-					if(pixel[0] != temp_pixel[0] || pixel[1] != temp_pixel[1] || pixel[2] != temp_pixel[2])
+					//std::cout<< "-=-=-2" << ( i + (j-1) * buffer_width ) * 3 << std::endl;
+					//std::cout << "-=-=-2" << ( i + (j) * buffer_width ) * 3 << std::endl;
+					if(checkNeighbors(pixel,temp_pixel, aaThresh))
 					{
 						aa_check = true;
+						goto aa;
 					}  
 				}
-
+				if( i - 1 >= 0 &&  j - 1 >= 0)
+				{
+					unsigned char *temp_pixel = buffer + ( i-1 + (j-1) * buffer_width ) * 3;
+					if(checkNeighbors(pixel,temp_pixel, aaThresh))
+					{
+						aa_check = true;
+						goto aa;
+					}  
+				}
+				if( i + 1 < buffer_width &&  j + 1 < buffer_height)
+				{
+					unsigned char *temp_pixel = buffer + ( i+1 + (j+1) * buffer_width ) * 3;
+					if(checkNeighbors(pixel,temp_pixel, aaThresh))
+					{
+						aa_check = true;
+						goto aa;
+					}  
+				}
+				if( i + 1 < buffer_width &&  j - 1 >= 0)
+				{
+					unsigned char *temp_pixel = buffer + ( (i+1) + (j-1) * buffer_width ) * 3;
+					if(checkNeighbors(pixel,temp_pixel, aaThresh))
+					{
+						aa_check = true;
+						goto aa;
+					}  
+				}
+				if( i - 1 >= 0 && j + 1 < buffer_height)
+				{
+					unsigned char *temp_pixel = buffer + ( (i-1) + (j+1) * buffer_width ) * 3;
+					if(checkNeighbors(pixel,temp_pixel, aaThresh))
+					{
+						aa_check = true;
+						goto aa;
+					}  
+				}
+				aa:
 				if(aa_check)
 				{
 					glm::dvec3 col = {0.0,0.0,0.0};
 					double x_length = double(i+1)/double(buffer_width) - x;
 					double y_length = double(j+1)/double(buffer_height) - y;
+					//std::cout << "x " << x << " y " << y << std::endl;
+					//std::cout << "xlength " << x_length << " ylength" << y_length << std::endl;
 					std::cout << y_length << endl;
-					double x_offset = x_length*(samples/2);
-					double y_offset = y_length*(samples/2);
+					double x_offset = -x_length*(1/2) + x_length*(1/(samples*2));
+					double y_offset = -y_length*(1/2) + y_length*(1/(samples*2));
 					for(int k = 0; k < samples; k++)
 					{
 						for(int l = 0; l < samples; l++)
 						{
-							col += (trace((x-x_offset)+(k*x_length/samples), (y-y_offset)+(l*y_length/samples), pixel, 0))/(double(samples*samples));
+							col += (trace((x+x_offset)+(k*x_length/samples), (y+y_offset)+(l*y_length/samples), pixel, 0))/(double(samples*samples));
 
-							std::cout << "AA CALC = " << ((x-x_offset)+(k*x_length/samples)) << " " << ((y-y_offset)+(l*y_length/samples)) << endl;
+							//std::cout << "AA CALC = " << ((x-x_offset)+(k*x_length/samples)) << " " << ((y-y_offset)+(l*y_length/samples)) << endl;
 						}
 					}
 					//col /= samples*samples;
-
+					std::cout << "*** AA Color Final = " << col[0] << " " << col[1] << " " << col[2] << std::endl;
 					pixel[0] = (int)( 255.0 * col[0]);
 					pixel[1] = (int)( 255.0 * col[1]);
 					pixel[2] = (int)( 255.0 * col[2]);
 				}
-
+				//abort();
 			}
+	}
 	//std::cout << "Finished anti aliasing " << buffer_height << " " << real << endl;
 
+}
+
+bool RayTracer::checkNeighbors(unsigned char* pixel, unsigned char* neighbor, double aaThresh)
+{
+	double a = glm::abs(pixel[0]-neighbor[0])/255.0;
+	double b = glm::abs(pixel[1]-neighbor[1])/255.0;
+	double c = glm::abs(pixel[2]-neighbor[2])/255.0;
+	if (a >= aaThresh || b >= aaThresh || c >= aaThresh)
+	{
+		return true;	
+	}
+	std::cout << "bad\n";
+	return false;
 }
 
 bool RayTracer::checkRender()

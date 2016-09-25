@@ -121,6 +121,10 @@ bool Scene::intersect(ray& r, isect& i) const {
 	return have_one;
 }
 
+void Scene::setupKd(){
+	kdTree = kdTree(objects, sceneBounds, 4);
+}
+
 TextureMap* Scene::getTexture(string name) {
 	tmap::const_iterator itr = textureCache.find(name);
 	if(itr == textureCache.end()) {

@@ -210,6 +210,7 @@ public:
     objects.push_back(obj);
   }
   void add(Light* light) { lights.push_back(light); }
+  void setupKd();
 
   bool intersect(ray& r, isect& i) const;
 
@@ -257,7 +258,7 @@ public:
   // are exempt from this requirement.
   BoundingBox sceneBounds;
   
-  KdTree<Geometry>* kdtree;
+  KdTree kdtree;
 
  public:
   // This is used for debugging purposes only.

@@ -6,6 +6,7 @@ class kdTree {
 private:
 	kdTree* left;
 	kdTree* right;
+	std::vector<Geometry*> obj_list;
 public:
 	BoundingBox Boundary;
 	Scene* scene;
@@ -14,8 +15,8 @@ public:
 	int dividing_dim;
 
 	kdTree();
-	kdTree(Scene* s, std::vector<Geometry*> objects, BoundingBox bb, int depth);
-	intersect(const ray& r);
+	kdTree(std::vector<Geometry*> objects, BoundingBox bb, int depth);
+	bool intersect(const ray& r, isect& i, std::vector<Geometry*>& rlist);
 	//kdTree() {scene = s;}
 	//void setup();
 	//void buildTree();

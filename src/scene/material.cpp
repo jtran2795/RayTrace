@@ -25,7 +25,7 @@ glm::dvec3 Material::shade(Scene *scene, const ray& r, const isect& i) const
 	glm::dvec3 q = r.at(c_t);
 	double spec = 0;
 	glm::dvec3 Color = ke(i) + ka(i) * scene->ambient();
-	std::cout << "ALL OF THE LIGHTS-----------\n";
+	//std::cout << "ALL OF THE LIGHTS-----------\n";
 	for (vector<Light*>::const_iterator litr = scene -> beginLights(); litr != scene -> endLights(); ++litr)
 	{
 		Light* pLight = *litr;
@@ -36,7 +36,7 @@ glm::dvec3 Material::shade(Scene *scene, const ray& r, const isect& i) const
 		}
 		glm::dvec3 atten = pLight -> distanceAttenuation(q) * pLight -> shadowAttenuation(r,q);
 		Color = Color + atten * pLight -> getColor() * (kd(i)*glm::max(0.0, glm::dot(i.N, pLight -> getDirection(q))) + ks(i)*glm::max( 0.0 , spec) ); //+ ks(i)*glm::dot(Reflect,r.getDirection()));
-		std::cout << Color[0] << " " << Color[1] << " " << Color[2] << " NORMAL:" << i.N[0] << "," << i.N[1] << "," << i.N[2] << endl;
+		//std::cout << Color[0] << " " << Color[1] << " " << Color[2] << " NORMAL:" << i.N[0] << "," << i.N[1] << "," << i.N[2] << endl;
 		//return Color;
 	}
 
