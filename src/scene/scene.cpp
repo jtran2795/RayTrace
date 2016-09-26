@@ -103,35 +103,36 @@ Scene::~Scene() {
 // intersection through the reference parameter.
 bool Scene::intersect(ray& r, isect& i) const {
 	double tmin = 0.0;
-	double tmax = 0.0;
+	double tstar = 0.0;
 	bool have_one = false;
-	std::vector<Geometry*> bbList;
-	isect i_dummy;
-	if(kdtree -> intersect(r, i_dummy, bbList));
+	//typedef vector<Geometry*>::const_iterator iter;
+	if(!(kdtree -> intersect(r,i,kdtree,tmin,tstar)))
 	{
-		std::cout << " Yes I'm actually intersecting. -- List Size" << bbList.size() << " \n";
-		typedef vector<Geometry*>::const_iterator iter;
-		for(iter j = bbList.begin(); j != bbList.end(); ++j) {
-			std::cout << " Going through object list atm.\n";
-			isect cur;
-			if( (*j)->intersect(r, cur) ) {
-				if(!have_one || (cur.t < i.t)) {
-					i = cur;
-					have_one = true;
-				}
+		i.setT(1000.0);
+		std::cout << "Bad! \n";
+	}
+	else
+	{
+		return true;
+	}
+	/*for(iter j = objects.begin(); j != objects.end(); ++j) {
+		isect cur;
+		if( (*j)->intersect(r, cur) ) {
+			if(!have_one || (cur.t < i.t)) {
+				i = cur;
+				have_one = true;
 			}
 		}
-	}
-/*		
 	}*/
-	if(!have_one) i.setT(1000.0);
+	//if(!have_one) i.setT(1000.0);
 	// if debugging,
 	if (TraceUI::m_debug) intersectCache.push_back(std::make_pair(new ray(r), new isect(i)));
 	return have_one;
 }
 
 void Scene::setupKd(){
-	kdtree = new kdTree(objects, sceneBounds, 4);
+	kdtree = kdtree -> buildTree(objects, 0);
+	std::cout << "Tree built\n";
 }
 
 TextureMap* Scene::getTexture(string name) {

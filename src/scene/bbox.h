@@ -18,6 +18,12 @@ public:
 	glm::dvec3 getMax() const { return bmax; }
 	bool isEmpty() { return bEmpty; }
 
+	glm::dvec3 getMid() const{
+		glm::dvec3 temp = (getMin() + getMax());
+		return glm::dvec3(temp[0]/2, temp[1]/2, temp[2]/2);
+
+	}
+
 	void setMin(glm::dvec3 bMin) {
 		bmin = bMin;
 		dirty = true;

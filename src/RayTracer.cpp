@@ -262,11 +262,11 @@ void RayTracer::traceSetup(int w, int h)
 void RayTracer::traceImage(int w, int h, int bs, double thresh)
 {
 	//h = (w / aspectRatio() + 0.5);
-	/*traceSetup( w, h );
+	traceSetup( w, h );
 
 	for( int j = 0; j < h; ++j )
 		for( int i = 0; i < w; ++i )
-			tracePixel(i,j,0);*/
+			tracePixel(i,j,0);
 
 
 	// YOUR CODE HERE

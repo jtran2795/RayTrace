@@ -7,18 +7,13 @@ class kdTree {
 private:
 	kdTree* left;
 	kdTree* right;
+	BoundingBox boundary;
 	std::vector<Geometry*> obj_list;
 public:
-	BoundingBox Boundary;
-	Scene* scene;
-	std::vector<glm::dvec3> coordinates;
-	double dividing_plane;
-	int dividing_dim;
-	int dead;
-	kdTree(){dead = -1;};
-	kdTree(std::vector<Geometry*> objects, BoundingBox bb, int depth);
-	bool intersect(const ray& r, isect& i, std::vector<Geometry*>& rlist);
-	//kdTree() {scene = s;}
+	kdTree();
+	kdTree* buildTree(std::vector<Geometry*> objs, int depth);
+	bool intersect(ray& r, isect& i, kdTree* dNode, double& tMin, double& tStar);
+
 	//void setup();
 	//void buildTree();
 
