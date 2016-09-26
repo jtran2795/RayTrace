@@ -93,6 +93,35 @@ public:
 		}
 		 return true; // it made it past all 3 axes.
 	}
+	bool intersect(const ray& r) const {
+		glm::dvec3 R0 = r.getPosition();
+		glm::dvec3 Rd = r.getDirection();
+		double tMin = -1.0e308; // 1.0e308 is close to infinity... close enough for us!
+		double tMax = 1.0e308;
+		double ttemp;
+	
+		for (int currentaxis = 0; currentaxis < 3; currentaxis++) {
+			double vd = Rd[currentaxis];
+			// if the ray is parallel to the face's plane (=0.0)
+			if( vd == 0.0 ) continue;
+			double v1 = bmin[currentaxis] - R0[currentaxis];
+			double v2 = bmax[currentaxis] - R0[currentaxis];
+			// two slab intersections
+			double t1 = v1/vd;
+			double t2 = v2/vd;
+			if ( t1 > t2 ) { // swap t1 & t2
+				ttemp = t1;
+				t1 = t2;
+				t2 = ttemp;
+			}
+			if (t1 > tMin) tMin = t1;
+			if (t2 < tMax) tMax = t2;
+			if (tMin > tMax) return false; // box is missed
+			if (tMax < RAY_EPSILON) return false; // box is behind ray
+		}
+		 return true; // it made it past all 3 axes.
+	}
+
 
 	void operator=(const BoundingBox& target) {
 		bmin = target.bmin;

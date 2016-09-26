@@ -14,7 +14,7 @@ kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
 	dNode -> right = NULL;
 	dNode -> boundary = BoundingBox();
 	dNode -> obj_list = objs;
-	
+
 	if(objs.size() == 0)
 	{
 		return dNode;
@@ -29,10 +29,17 @@ kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
 		//dNode -> obj_list = objs;
 		return dNode;
 	}
-
+	if(depth == 0)
+	{
+		dNode -> left = new kdTree();
+		dNode -> left -> obj_list = std::vector<Geometry*>();
+		dNode -> right = new kdTree();
+		dNode -> right -> obj_list = std::vector<Geometry*>();
+		return dNode;
+	}
 	//get bbox of all geometry
 	dNode -> boundary = objs[0] -> getBoundingBox();
-	
+
 	for(int i = 1; i < objs.size(); i++) 
 	{
 		dNode -> boundary.merge(objs[i] -> getBoundingBox());
@@ -48,7 +55,7 @@ kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
 	int axis_index = 0;
 	for(int i = 0; i < 3; i++)
 	{
-		double temp = glm::abs((dNode -> boundary.getMin())[i] - (dNode -> boundary.getMax())[i]);
+		double temp = glm::abs((dNode -> boundary.getMax())[i] - (dNode -> boundary.getMin())[i]);
 		if(temp > largest_axis)
 		{
 			largest_axis = temp;
@@ -57,21 +64,22 @@ kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
 	}
 
 	for(int i=0; i < objs.size(); i++)
-	{std::cout << "test\n";
+	{
 		if(axis_index == 0)
 		{
-			if(mid[0] >= (objs[i]->getBoundingBox().getMid())[i])
+			if(mid[0] >= ((objs[i]->getBoundingBox()).getMid())[0])
 			{
 				right_list.push_back(objs[i]);
 			}
 			else
 			{
 				left_list.push_back(objs[i]);
+			
 			}
 		}
 		if(axis_index == 1)
 		{
-			if(mid[1] >= (objs[i]->getBoundingBox().getMid())[i])
+			if(mid[1] >= ((objs[i]->getBoundingBox()).getMid())[1])
 			{
 				right_list.push_back(objs[i]);
 			}
@@ -82,7 +90,7 @@ kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
 		}
 		if(axis_index == 2)
 		{
-			if(mid[2] >= (objs[i]->getBoundingBox().getMid())[i])
+			if(mid[2] >= ((objs[i]->getBoundingBox()).getMid())[2])
 			{
 				right_list.push_back(objs[i]);
 			}
@@ -116,8 +124,8 @@ kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
 
 	if ((count/left_list.size() < 0.5) && (count/right_list.size() < 0.5))
 	{
-		dNode -> left = buildTree(left_list, depth + 1);
-		dNode -> right = buildTree(right_list, depth + 1);
+		dNode -> left = buildTree(left_list, depth - 1);
+		dNode -> right = buildTree(right_list, depth - 1);
 		return dNode;
 	}
 	else
@@ -135,8 +143,8 @@ bool kdTree::intersect( ray& r, isect& i, kdTree* dNode, double& tMin, double& t
 {
 	double t_min;
 	double t_max;
-	
-	if(dNode -> boundary.intersect(r, t_min, t_max))
+
+	if(dNode -> boundary.intersect(r))
 	{
 		glm::dvec3 normal = {0,0,0};
 
@@ -144,38 +152,76 @@ bool kdTree::intersect( ray& r, isect& i, kdTree* dNode, double& tMin, double& t
 		glm::dvec3 p_global;
 		glm::dvec3 p;
 
+		isect old;
+		// Material *m;
+		// const SceneObject *o;
+	 //    glm::dvec2 uvCoordinates;
+	 //    glm::dvec3 bary; 
 
-			//std::cout << "Couldn't do it. \n";
+
+			
 		bool intersected;
 		if(dNode -> left -> obj_list.size() > 0 || dNode -> right -> obj_list.size() > 0 )
 		{
-			if(intersect(r,i,dNode -> left,tMin, tStar))
+			//isect i_left;
+			//i_left.t = 1000.0;
+			
+			//i_right.t = 1000.0;
+			//std::cout << "Entered \n";
+			isect i_right = i;
+			bool left_path = intersect(r,i,dNode -> left,tMin, tStar);
+			//std::cout << "Finsihed left \n";
+			
+			bool right_path = intersect(r,i_right,dNode -> right,tMin, tStar);
+			//std::cout << "Finsihed right \n";
+			if(!left_path && right_path)
 			{
-				return true;
+				i = i_right;
 			}
-			if(intersect(r,i,dNode -> right,tMin, tStar))
+			if(left_path && right_path)
 			{
-				return true;
+				if(i_right.t < i.t)
+				{
+					i = i_right;
+					tMin = i_right.t;
+				}
 			}
-			return false;//
+			return (left_path || right_path);
+			//std::cout << "Finished both \n";
 		}
 		else{
 			for(int j = 0; j < (dNode -> obj_list.size()); j++)
 			{
-				if((dNode -> obj_list)[j] -> intersect(r,i)){
+				if((dNode -> obj_list)[j] -> intersect(r,i))
+				{
 					intersected = true;
-					tMin = i.t;
-					normal = i.N;
+					if(i.t < tMin)
+					{
+						tMin = i.t;
+						old = i;
+					}
 				}
 			}
 			if(intersected)
 			{
-				i.t = tMin;
-				normal = i.N;
+				//if(tMin != 1000.0){
+				if(old.t != 0){
+				i = old;}
+				//i.obj = o;
+				//i.uvCoordinates = uvCoordinates;
+				//i.material = m;
+				//i.bary = bary;//}
+				//std::cout << "Finished looking through list \n";
 				return true;
+				
 			}
+			return false;
 		}
 	}
+	else{
+		//std::cout <<"missed bbox \n";
+	}
+	//std::cout << "Nothing hit \n";
 	return false;
 }
 

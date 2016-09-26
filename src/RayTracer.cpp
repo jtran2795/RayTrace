@@ -78,6 +78,7 @@ glm::dvec3 RayTracer::traceRay(ray& r, const glm::dvec3& thresh, int depth, doub
 	double n_t;
 
 	if(scene->intersect(r, i)) {
+		//std::cout << "WE'RE DRAWING STFF NOW\n";
 		// YOUR CODE HERE
 
 		// An intersection occurred!  We've got work to do.  For now,
@@ -262,11 +263,11 @@ void RayTracer::traceSetup(int w, int h)
 void RayTracer::traceImage(int w, int h, int bs, double thresh)
 {
 	//h = (w / aspectRatio() + 0.5);
-	traceSetup( w, h );
+	/*traceSetup( w, h );
 
 	for( int j = 0; j < h; ++j )
 		for( int i = 0; i < w; ++i )
-			tracePixel(i,j,0);
+			tracePixel(i,j,0);*/
 
 
 	// YOUR CODE HERE
@@ -410,7 +411,7 @@ bool RayTracer::checkNeighbors(unsigned char* pixel, unsigned char* neighbor, do
 	{
 		return true;	
 	}
-	std::cout << "bad\n";
+	//std::cout << "bad\n";
 	return false;
 }
 

@@ -102,17 +102,24 @@ Scene::~Scene() {
 // Get any intersection with an object.  Return information about the 
 // intersection through the reference parameter.
 bool Scene::intersect(ray& r, isect& i) const {
-	double tmin = 0.0;
+	double tmin = 1000.0;
 	double tstar = 0.0;
 	bool have_one = false;
+		//std::cout << "intersecting stuff again\n";
 	//typedef vector<Geometry*>::const_iterator iter;
 	if(!(kdtree -> intersect(r,i,kdtree,tmin,tstar)))
 	{
 		i.setT(1000.0);
-		std::cout << "Bad! \n";
+		//std::cout << "Bad! \n";
 	}
 	else
 	{
+		if(i.t == 1000 || (i.N[0] == 0 && i.N[1] == 0 && i.N[2] == 0))
+		{
+			//std::cout << "Bad!   t" << i.t << " normal " << i.N << "\n";
+			return false;
+		}
+		//std::cout << "got some stuff   t" << i.t << " normal " << i.N << "\n";
 		return true;
 	}
 	/*for(iter j = objects.begin(); j != objects.end(); ++j) {
@@ -131,7 +138,7 @@ bool Scene::intersect(ray& r, isect& i) const {
 }
 
 void Scene::setupKd(){
-	kdtree = kdtree -> buildTree(objects, 0);
+	kdtree = kdtree -> buildTree(objects, 4);
 	std::cout << "Tree built\n";
 }
 
