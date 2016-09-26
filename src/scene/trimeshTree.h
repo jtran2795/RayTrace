@@ -1,18 +1,19 @@
 #pragma once
 // Note: you can put kd-tree heree
-#include "scene.h"
-class Geometry;
-class kdTree {
-//Geometry* se;
+//#include "scene.h"
+#include "../SceneObjects/trimesh.h"
+class TrimeshFace;
+class trimeshTree {
+//TrimeshFace* se;
 private:
-	kdTree* left;
-	kdTree* right;
+	trimeshTree* left;
+	trimeshTree* right;
 	BoundingBox boundary;
-	std::vector<Geometry*> obj_list;
+	std::vector<TrimeshFace*> obj_list;
 public:
-	kdTree();
-	kdTree* buildTree(std::vector<Geometry*> objs, int depth);
-	bool intersect(ray& r, isect& i, kdTree* dNode, double& smallest);
+	trimeshTree();
+	trimeshTree* buildTree(std::vector<TrimeshFace*> objs, int depth);
+	bool intersect(ray& r, isect& i, trimeshTree* dNode, double& smallest);
 
 	//void setup();
 	//void buildTree();

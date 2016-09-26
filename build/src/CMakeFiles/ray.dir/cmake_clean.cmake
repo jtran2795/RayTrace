@@ -8,6 +8,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/ray.dir/parser/Token.cpp.o"
   "CMakeFiles/ray.dir/parser/Parser.cpp.o"
   "CMakeFiles/ray.dir/parser/Tokenizer.cpp.o"
+  "CMakeFiles/ray.dir/scene/trimeshTree.cpp.o"
   "CMakeFiles/ray.dir/scene/ray.cpp.o"
   "CMakeFiles/ray.dir/scene/camera.cpp.o"
   "CMakeFiles/ray.dir/scene/light.cpp.o"

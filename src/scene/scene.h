@@ -210,7 +210,7 @@ public:
     objects.push_back(obj);
   }
   void add(Light* light) { lights.push_back(light); }
-  void setupKd();
+  void setupKd(bool b, int depth);
 
   bool intersect(ray& r, isect& i) const;
 
@@ -246,6 +246,7 @@ public:
   std::vector<Light*> lights;
   Camera camera;
   kdTree* kdtree;
+  bool bKD;
 
   // This is the total amount of ambient light in the scene
   // (used as the I_a in the Phong shading model)

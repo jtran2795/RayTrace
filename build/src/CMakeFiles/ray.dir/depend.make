@@ -17,7 +17,6 @@ src/CMakeFiles/ray.dir/RayTracer.cpp.o: ../src/parser/Tokenizer.h
 src/CMakeFiles/ray.dir/RayTracer.cpp.o: ../src/scene/bbox.h
 src/CMakeFiles/ray.dir/RayTracer.cpp.o: ../src/scene/camera.h
 src/CMakeFiles/ray.dir/RayTracer.cpp.o: ../src/scene/cubeMap.h
-src/CMakeFiles/ray.dir/RayTracer.cpp.o: ../src/scene/kdTree.h
 src/CMakeFiles/ray.dir/RayTracer.cpp.o: ../src/scene/light.h
 src/CMakeFiles/ray.dir/RayTracer.cpp.o: ../src/scene/material.h
 src/CMakeFiles/ray.dir/RayTracer.cpp.o: ../src/scene/ray.h
@@ -76,10 +75,10 @@ src/CMakeFiles/ray.dir/SceneObjects/trimesh.cpp.o: ../src/SceneObjects/trimesh.c
 src/CMakeFiles/ray.dir/SceneObjects/trimesh.cpp.o: ../src/SceneObjects/trimesh.h
 src/CMakeFiles/ray.dir/SceneObjects/trimesh.cpp.o: ../src/scene/bbox.h
 src/CMakeFiles/ray.dir/SceneObjects/trimesh.cpp.o: ../src/scene/camera.h
-src/CMakeFiles/ray.dir/SceneObjects/trimesh.cpp.o: ../src/scene/kdTree.h
 src/CMakeFiles/ray.dir/SceneObjects/trimesh.cpp.o: ../src/scene/material.h
 src/CMakeFiles/ray.dir/SceneObjects/trimesh.cpp.o: ../src/scene/ray.h
 src/CMakeFiles/ray.dir/SceneObjects/trimesh.cpp.o: ../src/scene/scene.h
+src/CMakeFiles/ray.dir/SceneObjects/trimesh.cpp.o: ../src/scene/trimeshTree.h
 src/CMakeFiles/ray.dir/SceneObjects/trimesh.cpp.o: ../src/ui/TraceUI.h
 
 src/CMakeFiles/ray.dir/fileio/bitmap.cpp.o: ../src/fileio/bitmap.cpp
@@ -99,7 +98,6 @@ src/CMakeFiles/ray.dir/fileio/buffer.cpp.o: ../src/parser/Token.h
 src/CMakeFiles/ray.dir/fileio/buffer.cpp.o: ../src/parser/Tokenizer.h
 src/CMakeFiles/ray.dir/fileio/buffer.cpp.o: ../src/scene/bbox.h
 src/CMakeFiles/ray.dir/fileio/buffer.cpp.o: ../src/scene/camera.h
-src/CMakeFiles/ray.dir/fileio/buffer.cpp.o: ../src/scene/kdTree.h
 src/CMakeFiles/ray.dir/fileio/buffer.cpp.o: ../src/scene/light.h
 src/CMakeFiles/ray.dir/fileio/buffer.cpp.o: ../src/scene/material.h
 src/CMakeFiles/ray.dir/fileio/buffer.cpp.o: ../src/scene/ray.h
@@ -180,7 +178,6 @@ src/CMakeFiles/ray.dir/parser/Parser.cpp.o: ../src/parser/Token.h
 src/CMakeFiles/ray.dir/parser/Parser.cpp.o: ../src/parser/Tokenizer.h
 src/CMakeFiles/ray.dir/parser/Parser.cpp.o: ../src/scene/bbox.h
 src/CMakeFiles/ray.dir/parser/Parser.cpp.o: ../src/scene/camera.h
-src/CMakeFiles/ray.dir/parser/Parser.cpp.o: ../src/scene/kdTree.h
 src/CMakeFiles/ray.dir/parser/Parser.cpp.o: ../src/scene/light.h
 src/CMakeFiles/ray.dir/parser/Parser.cpp.o: ../src/scene/material.h
 src/CMakeFiles/ray.dir/parser/Parser.cpp.o: ../src/scene/ray.h
@@ -273,6 +270,16 @@ src/CMakeFiles/ray.dir/scene/scene.cpp.o: ../src/ui/TraceUI.h
 src/CMakeFiles/ray.dir/scene/scene.cpp.o: /usr/local/include/FL/Enumerations.H
 src/CMakeFiles/ray.dir/scene/scene.cpp.o: /usr/local/include/FL/Fl_Export.H
 src/CMakeFiles/ray.dir/scene/scene.cpp.o: /usr/local/include/FL/gl.h
+
+src/CMakeFiles/ray.dir/scene/trimeshTree.cpp.o: ../src/SceneObjects/trimesh.h
+src/CMakeFiles/ray.dir/scene/trimeshTree.cpp.o: ../src/scene/bbox.h
+src/CMakeFiles/ray.dir/scene/trimeshTree.cpp.o: ../src/scene/camera.h
+src/CMakeFiles/ray.dir/scene/trimeshTree.cpp.o: ../src/scene/material.h
+src/CMakeFiles/ray.dir/scene/trimeshTree.cpp.o: ../src/scene/ray.h
+src/CMakeFiles/ray.dir/scene/trimeshTree.cpp.o: ../src/scene/scene.h
+src/CMakeFiles/ray.dir/scene/trimeshTree.cpp.o: ../src/scene/trimeshTree.cpp
+src/CMakeFiles/ray.dir/scene/trimeshTree.cpp.o: ../src/scene/trimeshTree.h
+src/CMakeFiles/ray.dir/scene/trimeshTree.cpp.o: ../src/ui/TraceUI.h
 
 src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o: ../src/RayTracer.h
 src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o: ../src/fileio/bitmap.h
@@ -492,7 +499,6 @@ src/CMakeFiles/ray.dir/ui/glObjects.cpp.o: ../src/SceneObjects/Square.h
 src/CMakeFiles/ray.dir/ui/glObjects.cpp.o: ../src/SceneObjects/trimesh.h
 src/CMakeFiles/ray.dir/ui/glObjects.cpp.o: ../src/scene/bbox.h
 src/CMakeFiles/ray.dir/ui/glObjects.cpp.o: ../src/scene/camera.h
-src/CMakeFiles/ray.dir/ui/glObjects.cpp.o: ../src/scene/kdTree.h
 src/CMakeFiles/ray.dir/ui/glObjects.cpp.o: ../src/scene/light.h
 src/CMakeFiles/ray.dir/ui/glObjects.cpp.o: ../src/scene/material.h
 src/CMakeFiles/ray.dir/ui/glObjects.cpp.o: ../src/scene/ray.h

@@ -26,6 +26,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/sonata/Downloads/RayTracer/src/scene/material.cpp" "/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/ray.dir/scene/material.cpp.o"
   "/home/sonata/Downloads/RayTracer/src/scene/ray.cpp" "/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/ray.dir/scene/ray.cpp.o"
   "/home/sonata/Downloads/RayTracer/src/scene/scene.cpp" "/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/ray.dir/scene/scene.cpp.o"
+  "/home/sonata/Downloads/RayTracer/src/scene/trimeshTree.cpp" "/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/ray.dir/scene/trimeshTree.cpp.o"
   "/home/sonata/Downloads/RayTracer/src/ui/CommandLineUI.cpp" "/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/ray.dir/ui/CommandLineUI.cpp.o"
   "/home/sonata/Downloads/RayTracer/src/ui/CubeMapChooser.cxx" "/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/ray.dir/ui/CubeMapChooser.cxx.o"
   "/home/sonata/Downloads/RayTracer/src/ui/GraphicalUI.cpp" "/home/sonata/Downloads/RayTracer/build/src/CMakeFiles/ray.dir/ui/GraphicalUI.cpp.o"

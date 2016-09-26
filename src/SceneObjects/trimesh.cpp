@@ -1,9 +1,12 @@
 #include <cmath>
 #include <float.h>
 #include <algorithm>
+#include <glm/gtx/extented_min_max.hpp>
+#include <glm/gtx/io.hpp>
 #include <assert.h>
 #include <string.h>
 #include "trimesh.h"
+#include "../scene/trimeshTree.h"
 #include "../ui/TraceUI.h"
 
 #include <iostream> //For debugging, remove later!
@@ -60,7 +63,7 @@ const char* Trimesh::doubleCheck()
     generateNormals();
     if( !normals.empty() && normals.size() != vertices.size() )
         return "Bad Trimesh: Wrong number of normals.";
-
+    tritree = tritree -> buildTree(faces, 4);
     return 0;
 }
 
@@ -68,7 +71,7 @@ bool Trimesh::intersectLocal(ray& r, isect& i) const
 {
 	typedef Faces::const_iterator iter;
 	bool have_one = false;
-	for( iter j = faces.begin(); j != faces.end(); ++j )
+	/*for( iter j = faces.begin(); j != faces.end(); ++j )
 	{
 		isect cur;
 		if( (*j)->intersectLocal( r, cur ) )
@@ -81,7 +84,37 @@ bool Trimesh::intersectLocal(ray& r, isect& i) const
 		}
 	}
 	if( !have_one ) i.setT(1000.0);
-	return have_one;
+	return have_one;*/
+    double tmin = 1000.0;
+        //std::cout << "intersecting stuff again\n";
+    //typedef vector<Geometry*>::const_iterator iter;
+    if(!(tritree -> intersect(r,i,tritree,tmin)))
+    {
+        i.setT(1000.0);
+        //std::cout << "Bad! \n";
+    }
+    else
+    {
+        if(i.t == 1000 || (i.N[0] == 0 && i.N[1] == 0 && i.N[2] == 0))
+        {
+            /*for(iter j = objects.begin(); j != objects.end(); ++j) {
+                isect cur;
+                if( (*j)->intersect(r, cur) ) {
+                    if(!have_one || (cur.t < i.t)) {
+                        i = cur;
+                        have_one = true;
+                    }
+                }
+            }
+        if(!have_one) i.setT(1000.0);
+            return have_one;*/
+        //std::cout << "got wrong stuff   t" << i.t << " normal " << i.N << "\n";
+        return false;
+        }
+        //std::cout << "got some stuff   t" << i.t << " normal " << i.N << "\n";
+        return true;
+    }
+    return have_one;
 } 
 
 bool TrimeshFace::intersect(ray& r, isect& i) const {

@@ -7,12 +7,13 @@
 #include "../scene/ray.h"
 #include "../scene/material.h"
 #include "../scene/scene.h"
-#include "../scene/kdTree.h"
-
+//#include "../scene/kdTree.h"
+//#include "../scene/trimeshTree.h"
 #include <glm/vec3.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
+class trimeshTree;
 class TrimeshFace;
+
 
 class Trimesh : public MaterialSceneObject
 {
@@ -27,6 +28,7 @@ class Trimesh : public MaterialSceneObject
 	Normals normals;
 	Materials materials;
 	BoundingBox localBounds;
+	trimeshTree* tritree;
 
 public:
 	Trimesh( Scene *scene, Material *mat, TransformNode *transform )

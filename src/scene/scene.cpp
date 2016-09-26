@@ -102,13 +102,28 @@ Scene::~Scene() {
 // Get any intersection with an object.  Return information about the 
 // intersection through the reference parameter.
 bool Scene::intersect(ray& r, isect& i) const {
-	double tmin = 1000.0;
-	double tstar = 0.0;
 	bool have_one = false;
 	typedef vector<Geometry*>::const_iterator iter;
+	if(!bKD){
+		for(iter j = objects.begin(); j != objects.end(); ++j) {
+			isect cur;
+			if( (*j)->intersect(r, cur) ) {
+				if(!have_one || (cur.t < i.t)) {
+					i = cur;
+					have_one = true;
+				}
+			}
+			
+
+		}
+		return have_one;
+		if(!have_one) i.setT(1000.0);
+	}
+
+	double smallest = 1000.0;
 		//std::cout << "intersecting stuff again\n";
 	//typedef vector<Geometry*>::const_iterator iter;
-	if(!(kdtree -> intersect(r,i,kdtree,tmin,tstar)))
+	if(!(kdtree -> intersect(r,i,kdtree,smallest)))
 	{
 		i.setT(1000.0);
 		//std::cout << "Bad! \n";
@@ -128,10 +143,10 @@ bool Scene::intersect(ray& r, isect& i) const {
 			}
 		if(!have_one) i.setT(1000.0);
 			return have_one;*/
-		std::cout << "got wrong stuff   t" << i.t << " normal " << i.N << "\n";
+		//std::cout << "got wrong stuff   t" << i.t << " normal " << i.N << "\n";
 		return false;
 		}
-		std::cout << "got some stuff   t" << i.t << " normal " << i.N << "\n";
+		//std::cout << "got some stuff   t" << i.t << " normal " << i.N << "\n";
 		return true;
 	}
 	/*for(iter j = objects.begin(); j != objects.end(); ++j) {
@@ -146,12 +161,16 @@ bool Scene::intersect(ray& r, isect& i) const {
 	//if(!have_one) i.setT(1000.0);
 	// if debugging,
 	if (TraceUI::m_debug) intersectCache.push_back(std::make_pair(new ray(r), new isect(i)));
-	return have_one;
+	return false;
 }
 
-void Scene::setupKd(){
-	kdtree = kdtree -> buildTree(objects, 4);
-	std::cout << "Tree built\n";
+void Scene::setupKd(bool b, int depth){
+	bKD = b;
+	if(b)
+	{
+		kdtree = kdtree -> buildTree(objects, depth);
+		std::cout << "Tree built\n";
+	}
 }
 
 TextureMap* Scene::getTexture(string name) {

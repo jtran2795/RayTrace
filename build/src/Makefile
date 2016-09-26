@@ -719,6 +719,33 @@ scene/scene.cpp.s:
 	cd /home/sonata/Downloads/RayTracer/build && $(MAKE) -f src/CMakeFiles/ray.dir/build.make src/CMakeFiles/ray.dir/scene/scene.cpp.s
 .PHONY : scene/scene.cpp.s
 
+scene/trimeshTree.o: scene/trimeshTree.cpp.o
+
+.PHONY : scene/trimeshTree.o
+
+# target to build an object file
+scene/trimeshTree.cpp.o:
+	cd /home/sonata/Downloads/RayTracer/build && $(MAKE) -f src/CMakeFiles/ray.dir/build.make src/CMakeFiles/ray.dir/scene/trimeshTree.cpp.o
+.PHONY : scene/trimeshTree.cpp.o
+
+scene/trimeshTree.i: scene/trimeshTree.cpp.i
+
+.PHONY : scene/trimeshTree.i
+
+# target to preprocess a source file
+scene/trimeshTree.cpp.i:
+	cd /home/sonata/Downloads/RayTracer/build && $(MAKE) -f src/CMakeFiles/ray.dir/build.make src/CMakeFiles/ray.dir/scene/trimeshTree.cpp.i
+.PHONY : scene/trimeshTree.cpp.i
+
+scene/trimeshTree.s: scene/trimeshTree.cpp.s
+
+.PHONY : scene/trimeshTree.s
+
+# target to generate assembly for a file
+scene/trimeshTree.cpp.s:
+	cd /home/sonata/Downloads/RayTracer/build && $(MAKE) -f src/CMakeFiles/ray.dir/build.make src/CMakeFiles/ray.dir/scene/trimeshTree.cpp.s
+.PHONY : scene/trimeshTree.cpp.s
+
 ui/CommandLineUI.o: ui/CommandLineUI.cpp.o
 
 .PHONY : ui/CommandLineUI.o
@@ -1010,6 +1037,9 @@ help:
 	@echo "... scene/scene.o"
 	@echo "... scene/scene.i"
 	@echo "... scene/scene.s"
+	@echo "... scene/trimeshTree.o"
+	@echo "... scene/trimeshTree.i"
+	@echo "... scene/trimeshTree.s"
 	@echo "... ui/CommandLineUI.o"
 	@echo "... ui/CommandLineUI.i"
 	@echo "... ui/CommandLineUI.s"

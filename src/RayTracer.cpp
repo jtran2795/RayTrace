@@ -241,8 +241,7 @@ bool RayTracer::loadScene( char* fn ) {
 	}
 
 	if( !sceneLoaded() ) return false;
-	scene -> setupKd();
-
+	scene -> setupKd(traceUI -> kdSwitch(),traceUI -> getMaxDepth());
 	return true;
 }
 

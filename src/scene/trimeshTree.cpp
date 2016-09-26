@@ -1,22 +1,22 @@
 // Note: you can put kd-tree heree
-#include "kdTree.h"
+#include "trimeshTree.h"
 #include <iostream>
-kdTree::kdTree(){
+trimeshTree::trimeshTree(){
 
 }
 
-kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
+trimeshTree* trimeshTree::buildTree(std::vector<TrimeshFace*> objs, int depth){
 
-	std::vector<Geometry*> left_list;
-	std::vector<Geometry*> right_list;
+	std::vector<TrimeshFace*> left_list;
+	std::vector<TrimeshFace*> right_list;
 
-	kdTree *dNode = new kdTree();
-	dNode -> left =  new kdTree();
-	dNode -> right =  new kdTree();
+	trimeshTree *dNode = new trimeshTree();
+	dNode -> left =  new trimeshTree();
+	dNode -> right =  new trimeshTree();
 	dNode -> boundary = BoundingBox();
 	dNode -> obj_list = objs;
 
-	std::cout << "Building Tree" << std::endl;
+	//std::cout << "Building Tree" << std::endl;
 
 	if(objs.size() == 0)
 	{
@@ -24,10 +24,10 @@ kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
 	}
 	if(objs.size() == 1)
 	{
-		dNode -> left = new kdTree();
-		dNode -> left -> obj_list = std::vector<Geometry*>();
-		dNode -> right = new kdTree();
-		dNode -> right -> obj_list = std::vector<Geometry*>();
+		dNode -> left = new trimeshTree();
+		dNode -> left -> obj_list = std::vector<TrimeshFace*>();
+		dNode -> right = new trimeshTree();
+		dNode -> right -> obj_list = std::vector<TrimeshFace*>();
 		dNode -> boundary =  objs[0] -> getBoundingBox();
 		//dNode -> obj_list = objs;
 		return dNode;
@@ -41,22 +41,34 @@ kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
 		dNode -> boundary.merge(objs[i] -> getBoundingBox());
 	}
 
-	if(depth == 0)
+	/*if(depth == 0)
 	{
-		dNode -> left = new kdTree();
-		dNode -> left -> obj_list = std::vector<Geometry*>();
-		dNode -> right = new kdTree();
-		dNode -> right -> obj_list = std::vector<Geometry*>();
+		dNode -> left = new trimeshTree();
+		dNode -> left -> obj_list = std::vector<TrimeshFace*>();
+		dNode -> right = new trimeshTree();
+		dNode -> right -> obj_list = std::vector<TrimeshFace*>();
 		return dNode;
-	}
-	/*glm::dvec3 mid;
+	}*/
+	glm::dvec3 mid;
 	for(int i = 0; i < objs.size(); i++)
 	{
 		mid+= (objs[i] -> getBoundingBox().getMid() * (1.0/objs.size()) );
-	}*/
+	}
 
-//splitting via sah
+	double largest_axis = 0;
+	int axis_index = 0;
+	for(int i = 0; i < 3; i++)
+	{
+		double temp = glm::abs((dNode -> boundary.getMax())[i] - (dNode -> boundary.getMin())[i]);
+		if(temp > largest_axis)
+		{
+			largest_axis = temp;
+			axis_index = i;
+		}
+	}
 
+//splitting via sah (takes too much time to build !!!)
+/*
 	double best_plane = 0;
 	double best_axis = -1;
 	double best_cost = 100e10;
@@ -144,8 +156,8 @@ kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
 			}
 		}
 	}
+*/
 
-/*
 	for(int i=0; i < objs.size(); i++)
 	{
 		if(axis_index == 0)
@@ -213,25 +225,22 @@ kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
 		dNode -> right = buildTree(right_list, depth - 1);
 		return dNode;
 	}
-	else*/
-	//if ((count/left_list.size() < 0.5) && (count/right_list.size() < 0.5))
-	//{
-		dNode -> left = buildTree(left_list, depth - 1);
-		dNode -> right = buildTree(right_list, depth - 1);
-		return dNode;
-	//}
-	// {
-	// 	dNode -> left = new kdTree();
-	// 	dNode -> left -> obj_list = std::vector<Geometry*>();
-	// 	dNode -> right = new kdTree();
-	// 	dNode -> right -> obj_list = std::vector<Geometry*>();
-	// 	return dNode;
+	else {
+	 	dNode -> left = new trimeshTree();
+	 	dNode -> left -> obj_list = std::vector<TrimeshFace*>();
+	 	dNode -> right = new trimeshTree();
+	 	dNode -> right -> obj_list = std::vector<TrimeshFace*>();
+	 	return dNode;
+	 }
 	// }
 	//return dNode;
 }
 
-bool kdTree::intersect( ray& r, isect& i, kdTree* dNode, double& smallest)
+bool trimeshTree::intersect( ray& r, isect& i, trimeshTree* dNode, double& smallest)
 {
+	//double t_min;
+	//double t_max;
+
 //std::cout << "about to intersect \n";
 	if(dNode -> boundary.intersect(r))
 	{
@@ -259,10 +268,10 @@ bool kdTree::intersect( ray& r, isect& i, kdTree* dNode, double& smallest)
 			//i_right.t = 1000.0;
 			//std::cout << "Entered \n";
 			isect i_right = i;
-			bool left_path = intersect(r,i,dNode -> left,smallest);
+			bool left_path = intersect(r,i,dNode -> left, smallest);
 			//std::cout << "Finsihed left \n";
 			
-			bool right_path = intersect(r,i_right,dNode -> right,smallest);
+			bool right_path = intersect(r,i_right,dNode -> right, smallest);
 			//std::cout << "Finsihed right \n";
 			if(!left_path && right_path)
 			{

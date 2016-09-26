@@ -113,12 +113,18 @@ float.h
 -
 algorithm
 -
+glm/gtx/extented_min_max.hpp
+-
+glm/gtx/io.hpp
+-
 assert.h
 -
 string.h
 -
 trimesh.h
 /home/sonata/Downloads/RayTracer/src/SceneObjects/trimesh.h
+../scene/trimeshTree.h
+/home/sonata/Downloads/RayTracer/src/scene/trimeshTree.h
 ../ui/TraceUI.h
 /home/sonata/Downloads/RayTracer/src/ui/TraceUI.h
 iostream
@@ -135,8 +141,6 @@ vector
 /home/sonata/Downloads/RayTracer/src/scene/material.h
 ../scene/scene.h
 /home/sonata/Downloads/RayTracer/src/scene/scene.h
-../scene/kdTree.h
-/home/sonata/Downloads/RayTracer/src/scene/kdTree.h
 glm/vec3.hpp
 -
 glm/gtc/matrix_transform.hpp
@@ -461,6 +465,16 @@ glm/geometric.hpp
 -
 glm/matrix.hpp
 -
+
+/home/sonata/Downloads/RayTracer/src/scene/trimeshTree.cpp
+trimeshTree.h
+/home/sonata/Downloads/RayTracer/src/scene/trimeshTree.h
+iostream
+-
+
+/home/sonata/Downloads/RayTracer/src/scene/trimeshTree.h
+../SceneObjects/trimesh.h
+/home/sonata/Downloads/RayTracer/src/SceneObjects/trimesh.h
 
 /home/sonata/Downloads/RayTracer/src/ui/CommandLineUI.cpp
 iostream
