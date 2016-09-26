@@ -6,14 +6,17 @@ kdTree::kdTree(){
 }
 
 kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
+
 	std::vector<Geometry*> left_list;
 	std::vector<Geometry*> right_list;
 
 	kdTree *dNode = new kdTree();
-	dNode -> left = NULL;
-	dNode -> right = NULL;
+	dNode -> left =  new kdTree();
+	dNode -> right =  new kdTree();
 	dNode -> boundary = BoundingBox();
 	dNode -> obj_list = objs;
+
+	std::cout << "Building Tree" << std::endl;
 
 	if(objs.size() == 0)
 	{
@@ -29,6 +32,15 @@ kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
 		//dNode -> obj_list = objs;
 		return dNode;
 	}
+
+	
+
+	dNode -> boundary = objs[0] -> getBoundingBox();
+	for(int i = 1; i < objs.size(); i++) 
+	{
+		dNode -> boundary.merge(objs[i] -> getBoundingBox());
+	}
+
 	if(depth == 0)
 	{
 		dNode -> left = new kdTree();
@@ -37,32 +49,103 @@ kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
 		dNode -> right -> obj_list = std::vector<Geometry*>();
 		return dNode;
 	}
-	//get bbox of all geometry
-	dNode -> boundary = objs[0] -> getBoundingBox();
-
-	for(int i = 1; i < objs.size(); i++) 
-	{
-		dNode -> boundary.merge(objs[i] -> getBoundingBox());
-	}
-
-	glm::dvec3 mid;
+	/*glm::dvec3 mid;
 	for(int i = 0; i < objs.size(); i++)
 	{
 		mid+= (objs[i] -> getBoundingBox().getMid() * (1.0/objs.size()) );
-	}
+	}*/
 
-	double largest_axis = 0;
-	int axis_index = 0;
+//splitting via sah
+
+	double best_plane = 0;
+	double best_axis = -1;
+	double best_cost = 100e10;
+	int    best_m = -1;
 	for(int i = 0; i < 3; i++)
 	{
-		double temp = glm::abs((dNode -> boundary.getMax())[i] - (dNode -> boundary.getMin())[i]);
-		if(temp > largest_axis)
+		for(int j = 0; j < objs.size(); j++)
 		{
-			largest_axis = temp;
-			axis_index = i;
+			for(int m = 0; m < 2; m++)
+			{
+				double div_plane;
+				if(m == 0) div_plane = (objs[j]->getBoundingBox()).getMin()[i];
+				if(m == 1) div_plane = (objs[j]->getBoundingBox()).getMax()[i];
+				BoundingBox left_box = BoundingBox();
+				BoundingBox right_box = BoundingBox();
+				
+				int n_l = 0;
+				int n_r = 0;
+				for(int k = 0; k < objs.size(); k++)
+				{
+					if(m == 0)
+					{
+						if((objs[k]->getBoundingBox()).getMax()[i] <= div_plane)
+						{
+							n_l++;
+							left_box.merge(objs[k] -> getBoundingBox());
+						}
+						else
+						{
+							n_r++;
+							right_box.merge(objs[k] -> getBoundingBox());
+						}
+					}
+					if(m == 1)
+					{
+						if((objs[k]->getBoundingBox()).getMin()[i] > div_plane)
+						{
+							n_l++;
+							left_box.merge(objs[k] -> getBoundingBox());
+						}
+						else
+						{
+							n_r++;
+							right_box.merge(objs[k] -> getBoundingBox());
+						}
+					}
+				}
+				double sa_l = left_box.area();
+				double sa_r = right_box.area();
+
+				double sa_hue = sa_l*n_l + sa_r*n_r;
+				if(sa_hue < best_cost)
+				{
+					best_cost = sa_hue;
+					best_axis = i;
+					best_plane = div_plane;
+					best_m = m;
+				}
+			}
 		}
 	}
 
+	for(int i = 0; i < objs.size(); i++)
+	{
+		if(best_m == 0)
+		{
+			if((objs[i]->getBoundingBox()).getMax()[best_axis] <= best_plane)
+			{
+				left_list.push_back(objs[i]);
+			}
+			else
+			{
+				right_list.push_back(objs[i]);
+			}
+		}
+		if(best_m == 1)
+		{
+			if((objs[i]->getBoundingBox()).getMin()[best_axis] > best_plane)
+			{
+				left_list.push_back(objs[i]);
+			}
+			else
+			{
+				right_list.push_back(objs[i]);
+			}
+		}
+	}
+
+/*
 	for(int i=0; i < objs.size(); i++)
 	{
 		if(axis_index == 0)
@@ -101,6 +184,8 @@ kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
 		}
 	}
 
+
+
 	if(left_list.size() == 0 && right_list.size() > 0)
 	{
 		left_list = right_list;
@@ -128,15 +213,21 @@ kdTree* kdTree::buildTree(std::vector<Geometry*> objs, int depth){
 		dNode -> right = buildTree(right_list, depth - 1);
 		return dNode;
 	}
-	else
-	{
-		dNode -> left = new kdTree();
-		dNode -> left -> obj_list = std::vector<Geometry*>();
-		dNode -> right = new kdTree();
-		dNode -> right -> obj_list = std::vector<Geometry*>();
+	else*/
+	//if ((count/left_list.size() < 0.5) && (count/right_list.size() < 0.5))
+	//{
+		dNode -> left = buildTree(left_list, depth - 1);
+		dNode -> right = buildTree(right_list, depth - 1);
 		return dNode;
-	}
-	return dNode;
+	//}
+	// {
+	// 	dNode -> left = new kdTree();
+	// 	dNode -> left -> obj_list = std::vector<Geometry*>();
+	// 	dNode -> right = new kdTree();
+	// 	dNode -> right -> obj_list = std::vector<Geometry*>();
+	// 	return dNode;
+	// }
+	//return dNode;
 }
 
 bool kdTree::intersect( ray& r, isect& i, kdTree* dNode, double& tMin, double& tStar)
@@ -144,15 +235,17 @@ bool kdTree::intersect( ray& r, isect& i, kdTree* dNode, double& tMin, double& t
 	double t_min;
 	double t_max;
 
+//std::cout << "about to intersect \n";
 	if(dNode -> boundary.intersect(r))
 	{
 		glm::dvec3 normal = {0,0,0};
 
 
-		glm::dvec3 p_global;
-		glm::dvec3 p;
+		//glm::dvec3 p_global;
+		//glm::dvec3 p;
 
 		isect old;
+		old.t = -1;
 		// Material *m;
 		// const SceneObject *o;
 	 //    glm::dvec2 uvCoordinates;
@@ -194,27 +287,36 @@ bool kdTree::intersect( ray& r, isect& i, kdTree* dNode, double& tMin, double& t
 			{
 				if((dNode -> obj_list)[j] -> intersect(r,i))
 				{
-					intersected = true;
-					if(i.t < tMin)
+					if(!( i.t == 0 || i.t == 1000 || (i.N[0] == 0 && i.N[1] == 0 && i.N[2] == 0)))
 					{
-						tMin = i.t;
-						old = i;
+						intersected = true;
+						if(i.t < tMin)
+						{
+							tMin = i.t;
+							old = i;
+						}
 					}
 				}
 			}
 			if(intersected)
 			{
 				//if(tMin != 1000.0){
-				if(old.t != 0){
+				if(old.t != -1){
 				i = old;}
 				//i.obj = o;
 				//i.uvCoordinates = uvCoordinates;
 				//i.material = m;
+				if(i.t == 0)
+				{
+					//std::cout << "False. Not actual shit.\n";
+					return false;
+				}
 				//i.bary = bary;//}
-				//std::cout << "Finished looking through list \n";
+				//std::cout << "Returned true. \n";
 				return true;
 				
 			}
+			//std::cout << "False, didn't intersect.\n";
 			return false;
 		}
 	}

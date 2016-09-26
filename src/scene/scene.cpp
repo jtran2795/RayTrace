@@ -105,6 +105,7 @@ bool Scene::intersect(ray& r, isect& i) const {
 	double tmin = 1000.0;
 	double tstar = 0.0;
 	bool have_one = false;
+	typedef vector<Geometry*>::const_iterator iter;
 		//std::cout << "intersecting stuff again\n";
 	//typedef vector<Geometry*>::const_iterator iter;
 	if(!(kdtree -> intersect(r,i,kdtree,tmin,tstar)))
@@ -116,10 +117,21 @@ bool Scene::intersect(ray& r, isect& i) const {
 	{
 		if(i.t == 1000 || (i.N[0] == 0 && i.N[1] == 0 && i.N[2] == 0))
 		{
-			//std::cout << "Bad!   t" << i.t << " normal " << i.N << "\n";
-			return false;
+			/*for(iter j = objects.begin(); j != objects.end(); ++j) {
+				isect cur;
+				if( (*j)->intersect(r, cur) ) {
+					if(!have_one || (cur.t < i.t)) {
+						i = cur;
+						have_one = true;
+					}
+				}
+			}
+		if(!have_one) i.setT(1000.0);
+			return have_one;*/
+		std::cout << "got wrong stuff   t" << i.t << " normal " << i.N << "\n";
+		return false;
 		}
-		//std::cout << "got some stuff   t" << i.t << " normal " << i.N << "\n";
+		std::cout << "got some stuff   t" << i.t << " normal " << i.N << "\n";
 		return true;
 	}
 	/*for(iter j = objects.begin(); j != objects.end(); ++j) {

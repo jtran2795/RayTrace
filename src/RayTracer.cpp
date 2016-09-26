@@ -263,11 +263,11 @@ void RayTracer::traceSetup(int w, int h)
 void RayTracer::traceImage(int w, int h, int bs, double thresh)
 {
 	//h = (w / aspectRatio() + 0.5);
-	/*traceSetup( w, h );
+	traceSetup( w, h );
 
 	for( int j = 0; j < h; ++j )
 		for( int i = 0; i < w; ++i )
-			tracePixel(i,j,0);*/
+			tracePixel(i,j,0);
 
 
 	// YOUR CODE HERE
@@ -390,7 +390,7 @@ int RayTracer::aaImage(int samples, double aaThresh)
 						}
 					}
 					//col /= samples*samples;
-					std::cout << "*** AA Color Final = " << col[0] << " " << col[1] << " " << col[2] << std::endl;
+					//std::cout << "*** AA Color Final = " << col[0] << " " << col[1] << " " << col[2] << std::endl;
 					pixel[0] = (int)( 255.0 * col[0]);
 					pixel[1] = (int)( 255.0 * col[1]);
 					pixel[2] = (int)( 255.0 * col[2]);
