@@ -417,7 +417,7 @@ bool RayTracer::checkNeighbors(unsigned char* pixel, unsigned char* neighbor, do
 bool RayTracer::checkRender()
 {
 	// YOUR CODE HERE
-	std::cout << "DONE" << endl;
+	//std::cout << "DONE" << endl;
 
 	// FIXME: Return true if tracing is done.
 	return true;

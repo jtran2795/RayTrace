@@ -11,48 +11,36 @@ trimeshTree* trimeshTree::buildTree(std::vector<TrimeshFace*> objs, int depth){
 	std::vector<TrimeshFace*> right_list;
 
 	trimeshTree *dNode = new trimeshTree();
-	dNode -> left =  new trimeshTree();
-	dNode -> right =  new trimeshTree();
 	dNode -> boundary = BoundingBox();
 	dNode -> obj_list = objs;
 
 	//std::cout << "Building Tree" << std::endl;
 
-	if(objs.size() == 0)
+	dNode -> left =  new trimeshTree();
+	dNode -> right =  new trimeshTree();
+
+	if(objs.size() == 0) //no objects in node
 	{
 		return dNode;
 	}
-	if(objs.size() == 1)
+
+	if(objs.size() == 1) //one object in node
 	{
-		dNode -> left = new trimeshTree();
 		dNode -> left -> obj_list = std::vector<TrimeshFace*>();
-		dNode -> right = new trimeshTree();
 		dNode -> right -> obj_list = std::vector<TrimeshFace*>();
 		dNode -> boundary =  objs[0] -> getBoundingBox();
-		//dNode -> obj_list = objs;
 		return dNode;
 	}
 
-	
-
-	dNode -> boundary = objs[0] -> getBoundingBox();
-	for(int i = 1; i < objs.size(); i++) 
+	for(int i = 0; i < objs.size(); i++) 
 	{
 		dNode -> boundary.merge(objs[i] -> getBoundingBox());
 	}
 
-	/*if(depth == 0)
-	{
-		dNode -> left = new trimeshTree();
-		dNode -> left -> obj_list = std::vector<TrimeshFace*>();
-		dNode -> right = new trimeshTree();
-		dNode -> right -> obj_list = std::vector<TrimeshFace*>();
-		return dNode;
-	}*/
 	glm::dvec3 mid;
 	for(int i = 0; i < objs.size(); i++)
 	{
-		mid+= (objs[i] -> getBoundingBox().getMid() * (1.0/objs.size()) );
+		mid+= ((objs[i] -> getBoundingBox().getMid()) * (1.0/objs.size()) );
 	}
 
 	double largest_axis = 0;
@@ -67,7 +55,7 @@ trimeshTree* trimeshTree::buildTree(std::vector<TrimeshFace*> objs, int depth){
 		}
 	}
 
-//splitting via sah (takes too much time to build !!!)
+//splitting via Surface Area Hueristic takes too long on Trimeshes.
 /*
 	double best_plane = 0;
 	double best_axis = -1;
@@ -158,56 +146,21 @@ trimeshTree* trimeshTree::buildTree(std::vector<TrimeshFace*> objs, int depth){
 	}
 */
 
-	for(int i=0; i < objs.size(); i++)
+//Split by midpoints.
+
+	for(int i=0; i < objs.size(); i++) //add to left or right list depeding on location from midpoint
 	{
-		if(axis_index == 0)
+		if(mid[axis_index] < ((objs[i]->getBoundingBox()).getMid())[axis_index])
 		{
-			if(mid[0] >= ((objs[i]->getBoundingBox()).getMid())[0])
-			{
-				right_list.push_back(objs[i]);
-			}
-			else
-			{
-				left_list.push_back(objs[i]);
-			
-			}
+			left_list.push_back(objs[i]);
 		}
-		if(axis_index == 1)
+		else
 		{
-			if(mid[1] >= ((objs[i]->getBoundingBox()).getMid())[1])
-			{
-				right_list.push_back(objs[i]);
-			}
-			else
-			{
-				left_list.push_back(objs[i]);
-			}
-		}
-		if(axis_index == 2)
-		{
-			if(mid[2] >= ((objs[i]->getBoundingBox()).getMid())[2])
-			{
-				right_list.push_back(objs[i]);
-			}
-			else
-			{
-				left_list.push_back(objs[i]);
-			}
+			right_list.push_back(objs[i]);
 		}
 	}
 
-
-
-	if(left_list.size() == 0 && right_list.size() > 0)
-	{
-		left_list = right_list;
-	}
-	if(right_list.size() == 0 && left_list.size() > 0)
-	{
-		right_list = left_list;
-	}
-
-	double count = 0;
+	double count = 0; //check for same value in either lists
 	for(int i = 0; i < left_list.size(); i++)
 	{
 		for(int j = 0; j < right_list.size(); j++)
@@ -218,85 +171,66 @@ trimeshTree* trimeshTree::buildTree(std::vector<TrimeshFace*> objs, int depth){
 			}
 		}
 	}
-
-	if ((count/left_list.size() < 0.5) && (count/right_list.size() < 0.5))
+	double left_matches = count/left_list.size();
+	double right_matches = count/right_list.size();
+	double thresh = 0.5;
+	if (left_matches < thresh && right_matches < thresh)
 	{
 		dNode -> left = buildTree(left_list, depth - 1);
 		dNode -> right = buildTree(right_list, depth - 1);
 		return dNode;
 	}
-	else {
+	else 
+	{
 	 	dNode -> left = new trimeshTree();
 	 	dNode -> left -> obj_list = std::vector<TrimeshFace*>();
+
 	 	dNode -> right = new trimeshTree();
 	 	dNode -> right -> obj_list = std::vector<TrimeshFace*>();
 	 	return dNode;
 	 }
-	// }
-	//return dNode;
 }
 
+//based on bounding box heirchy search, checks for intersections with bounding boxes
 bool trimeshTree::intersect( ray& r, isect& i, trimeshTree* dNode, double& smallest)
 {
-	//double t_min;
-	//double t_max;
 
 //std::cout << "about to intersect \n";
 	if(dNode -> boundary.intersect(r))
 	{
-		glm::dvec3 normal = {0,0,0};
-
-
-		//glm::dvec3 p_global;
-		//glm::dvec3 p;
-
-		isect old;
+		isect old; // used for later
 		old.t = -1;
-		// Material *m;
-		// const SceneObject *o;
-	 //    glm::dvec2 uvCoordinates;
-	 //    glm::dvec3 bary; 
-
-
-			
 		bool intersected;
-		if(dNode -> left -> obj_list.size() > 0 || dNode -> right -> obj_list.size() > 0 )
+		if((dNode -> left -> obj_list.size() > 0) || (dNode -> right -> obj_list.size() > 0) ) // check if either lists are not empty
 		{
-			//isect i_left;
-			//i_left.t = 1000.0;
-			
-			//i_right.t = 1000.0;
-			//std::cout << "Entered \n";
-			isect i_right = i;
-			bool left_path = intersect(r,i,dNode -> left, smallest);
-			//std::cout << "Finsihed left \n";
-			
-			bool right_path = intersect(r,i_right,dNode -> right, smallest);
-			//std::cout << "Finsihed right \n";
-			if(!left_path && right_path)
+			isect i_right = i; //don't overwrite i
+			bool left_path = intersect(r,i,dNode -> left, smallest); //recurse
+			bool right_path = intersect(r,i_right,dNode -> right, smallest); //recurse
+			if(!left_path && right_path) //if no left list intersection, i is the right list
 			{
 				i = i_right;
+				return true;
 			}
-			if(left_path && right_path)
+			if(left_path && right_path) //check which intersection was closer
 			{
 				if(i_right.t < i.t)
 				{
 					i = i_right;
 					smallest = i_right.t;
 				}
+				return true;
 			}
-			return (left_path || right_path);
-			//std::cout << "Finished both \n";
+			return (left_path || right_path); //return if there was intersection
 		}
 		else{
-			for(int j = 0; j < (dNode -> obj_list.size()); j++)
+			for(int j = 0; j < (dNode -> obj_list.size()); j++) //check every geometry for intersection
 			{
 				if((dNode -> obj_list)[j] -> intersect(r,i))
 				{
-					if(!( i.t == 0 || i.t == 1000 || (i.N[0] == 0 && i.N[1] == 0 && i.N[2] == 0)))
+					if(!( i.t == 0 || i.t == 1000 || (i.N[0] == 0 && i.N[1] == 0 && i.N[2] == 0))) //invalid isect
 					{
 						intersected = true;
-						if(i.t < smallest)
+						if(i.t < smallest) //check if smallest
 						{
 							smallest = i.t;
 							old = i;
@@ -304,17 +238,13 @@ bool trimeshTree::intersect( ray& r, isect& i, trimeshTree* dNode, double& small
 					}
 				}
 			}
-			if(intersected)
+			if(intersected) // there was an intersection
 			{
-				//if(tMin != 1000.0){
-				if(old.t != -1){
-				i = old;}
-				//i.obj = o;
-				//i.uvCoordinates = uvCoordinates;
-				//i.material = m;
-				if(i.t == 0)
+				if(old.t != -1){ //there was an old value set already
+				i = old;} //use it
+				if(i.t == 0) //not really an intersection
 				{
-					//std::cout << "False. Not actual shit.\n";
+					//std::cout << "False.""
 					return false;
 				}
 				//i.bary = bary;//}
@@ -328,31 +258,7 @@ bool trimeshTree::intersect( ray& r, isect& i, trimeshTree* dNode, double& small
 	}
 	else{
 		//std::cout <<"missed bbox \n";
-	}
-	//std::cout << "Nothing hit \n";
+		}
+	//std::cout << "Nothing intersected \n";
 	return false;
 }
-
-/*build tree
-
-1. Check costs.
-for(int i = 0; i < scene.objects, list of division planes)// the object list is sorted by x,y,z axis
-{
-	cost = Sa/S
-	if (cost > maxcost)
-	{
-		maxcost = cost;
-		maxcost_index = cost;
-	}
-}
-
-That's the division
-get objects on near and far side
-set into the near and far node
-pass through build tree with the new node and the list of objects
-recurse
-do the same with far side
-recurse
-done
-*/
-

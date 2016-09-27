@@ -63,7 +63,7 @@ const char* Trimesh::doubleCheck()
     generateNormals();
     if( !normals.empty() && normals.size() != vertices.size() )
         return "Bad Trimesh: Wrong number of normals.";
-    tritree = tritree -> buildTree(faces, 4);
+    tritree = tritree -> buildTree(faces, 15);
     return 0;
 }
 
