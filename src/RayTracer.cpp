@@ -376,7 +376,7 @@ int RayTracer::aaImage(int samples, double aaThresh)
 					double y_length = double(j+1)/double(buffer_height) - y;
 					//std::cout << "x " << x << " y " << y << std::endl;
 					//std::cout << "xlength " << x_length << " ylength" << y_length << std::endl;
-					std::cout << y_length << endl;
+					//std::cout << y_length << endl;
 					double x_offset = -x_length*(1/2) + x_length*(1/(samples*2));
 					double y_offset = -y_length*(1/2) + y_length*(1/(samples*2));
 					for(int k = 0; k < samples; k++)

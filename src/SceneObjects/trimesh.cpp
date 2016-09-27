@@ -60,7 +60,7 @@ const char* Trimesh::doubleCheck()
 {
     if( !materials.empty() && materials.size() != vertices.size() )
         return "Bad Trimesh: Wrong number of materials.";
-    generateNormals();
+    //generateNormals();
     if( !normals.empty() && normals.size() != vertices.size() )
         return "Bad Trimesh: Wrong number of normals.";
     tritree = tritree -> buildTree(faces, 15);
@@ -215,15 +215,29 @@ bool TrimeshFace::intersectLocal(ray& r, isect& i) const
 
     //cout << "HIT!\n";
     i.obj = this;
-    i.setMaterial(this->getMaterial());
+    
     i.t = t;
+
     if(parent -> vertNorms){
-    double N_x = glm::normalize(parent -> normals[ids[0]])[0]*alpha + glm::normalize(parent -> normals[ids[1]])[0]*beta + glm::normalize(parent -> normals[ids[2]])[0] *gamma;
-    double N_y = glm::normalize(parent -> normals[ids[0]])[1]*alpha + glm::normalize(parent -> normals[ids[1]])[1]*beta + glm::normalize(parent -> normals[ids[2]])[1] *gamma;
-    double N_z = glm::normalize(parent -> normals[ids[0]])[2]*alpha + glm::normalize(parent -> normals[ids[1]])[2]*beta + glm::normalize(parent -> normals[ids[2]])[2] *gamma;
-    i.N = glm::normalize(glm::dvec3{N_x,N_y,N_z});
+    glm::dvec3 interp = parent -> normals[ids[0]]*alpha + parent -> normals[ids[1]]*beta + parent -> normals[ids[2]] *gamma;
+    //double N_y = glm::normalize(parent -> normals[ids[0]])[1]*alpha + glm::normalize(parent -> normals[ids[1]])[1]*beta + glm::normalize(parent -> normals[ids[2]])[1] *gamma;
+    //double N_z = glm::normalize(parent -> normals[ids[0]])[2]*alpha + glm::normalize(parent -> normals[ids[1]])[2]*beta + glm::normalize(parent -> normals[ids[2]])[2] *gamma;
+    //std::cout << "PUMP \n";
+    i.setN(interp);
+    //m_Norm = (1.0/3.0)*m_Norm;
+    //i.setMaterial(m_Norm);
     }//glm::normalize(glm::dvec3{N_x,N_y,N_z});//normal;
-    i.N = normal;
+    else{i.N = normal;}
+    if(!parent -> materials.empty()){
+        Material m_Norm;
+        m_Norm += alpha*(*(parent -> materials[ids[0]]));
+        m_Norm += beta*(*(parent -> materials[ids[1]]));
+        m_Norm += gamma*(*(parent -> materials[ids[2]]));
+        i.setMaterial(m_Norm);
+    }
+    else{
+        i.setMaterial(this->getMaterial());
+    }
     //std::cout << "A B C" << alpha << " " << beta << " " << gamma << endl;
     //std::cout << "TRIMESH NORMALS" << parent ->  normals[ids[0]][0] << " " << parent ->  normals[ids[1]][0] << " " << parent ->  normals[ids[2]][0] << endl;
     //std::cout << "TRIMESH NORMALS" << N_x << " " << N_y << " " << N_z << endl;
@@ -261,5 +275,6 @@ void Trimesh::generateNormals()
 
     delete [] numFaces;
     vertNorms = true;
+    //std::cout << "Done\n";
 }
 

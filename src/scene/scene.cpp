@@ -169,7 +169,7 @@ void Scene::setupKd(bool b, int depth){
 	if(b)
 	{
 		kdtree = kdtree -> buildTree(objects, depth);
-		std::cout << "Tree built\n";
+		//std::cout << "Tree built\n";
 	}
 }
 
