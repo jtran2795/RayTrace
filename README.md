@@ -1,4 +1,10 @@
+# About this Project
+This is a ray tracer that simulates Phong shading, reflection, refraction and more.
+Also features antialiasing and acceleration via KD Trees.
+
 # Getting Started
+
+The following are instructions from professor Don Fussel from the University of Texas at Austin.
 
 ## Build
 
